@@ -283,12 +283,13 @@ BEGIN
   -- Insert into auth.users (Executes with postgres permissions due to SECURITY DEFINER)
   INSERT INTO auth.users (
     instance_id, id, aud, role, email, encrypted_password, 
-    email_confirmed_at, raw_user_meta_data,
+    email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
     created_at, updated_at
   ) VALUES (
     '00000000-0000-0000-0000-000000000000', v_user_id, 'authenticated', 'authenticated', v_email, 
     crypt(p_password, gen_salt('bf')), 
     NOW(),
+    '{"provider": "email", "providers": ["email"]}'::jsonb,
     jsonb_build_object('full_name', p_full_name, 'role', 'operator', 'parent_id', v_parent_id),
     NOW(), NOW()
   );

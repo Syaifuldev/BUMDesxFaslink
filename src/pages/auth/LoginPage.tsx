@@ -26,8 +26,9 @@ export default function LoginPage() {
       await authService.signIn(mappedEmail, data.password)
       toast.success('Welcome back!')
       navigate('/')
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Login failed'
+    } catch (err: any) {
+      console.error('Login error:', err)
+      const msg = err?.message || (typeof err === 'string' ? err : 'Login failed')
       toast.error(msg)
     }
   }
