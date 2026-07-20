@@ -40,7 +40,7 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
         open={open}
         onClose={onClose}
         title="Cetak Kartu Undangan"
-        size="lg"
+        size="xl"
         footer={
           <>
             <Button variant="outline" onClick={onClose}>Batal</Button>
@@ -50,16 +50,16 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
           </>
         }
       >
-          <div className="p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-x-auto flex justify-center w-full">
+          <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full min-w-[600px] max-w-3xl border relative">
+            <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full max-w-3xl border relative">
               <div className="text-center mb-6 border-b-2 border-black pb-4">
                 <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider">KARTU UNDANGAN</h1>
                 <h2 className="text-lg sm:text-xl font-bold mt-1 text-gray-800">{event.name}</h2>
               </div>
               
-              <div className="flex flex-row gap-6 items-start justify-between">
-                <div className="flex-1 space-y-4 text-base sm:text-lg">
+              <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start justify-between text-center sm:text-left">
+                <div className="flex-1 space-y-4 text-base sm:text-lg w-full">
                   <div>
                     <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
                     <p className="font-bold text-lg sm:text-xl">{guest.name}</p>
