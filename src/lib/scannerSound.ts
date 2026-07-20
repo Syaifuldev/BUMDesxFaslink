@@ -36,32 +36,33 @@ export function playSuccessSound(): void {
   }
 }
 
-/** Play a warning beep (flat double tone) */
+/** Play a warning beep (distinct buzzer sound) */
 export function playWarningSound(): void {
   try {
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)()
 
-    const playTone = (freq: number, startTime: number, duration: number) => {
+    const playTone = (freq: number, type: OscillatorType, startTime: number, duration: number) => {
       const osc      = ctx.createOscillator()
       const gainNode = ctx.createGain()
       osc.connect(gainNode)
       gainNode.connect(ctx.destination)
 
-      osc.type      = 'square'
+      osc.type      = type
       osc.frequency.setValueAtTime(freq, startTime)
       gainNode.gain.setValueAtTime(0,    startTime)
-      gainNode.gain.linearRampToValueAtTime(0.15, startTime + 0.01)
-      gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration)
+      gainNode.gain.linearRampToValueAtTime(0.5, startTime + 0.02)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration)
 
       osc.start(startTime)
       osc.stop(startTime + duration)
     }
 
     const now = ctx.currentTime
-    playTone(440, now,        0.1)
-    playTone(440, now + 0.15, 0.1)   // same note twice — warning
+    // Play a dissonant double buzz (like a game show wrong answer buzzer)
+    playTone(150, 'sawtooth', now,        0.2)
+    playTone(150, 'sawtooth', now + 0.25, 0.4)
 
-    setTimeout(() => ctx.close().catch(() => {}), 600)
+    setTimeout(() => ctx.close().catch(() => {}), 1000)
   } catch { /* ignore */ }
 }
 

@@ -113,39 +113,6 @@ function ResultPanel({ result, onDismiss }: { result: ScanResult; onDismiss: () 
   const cfg = configs[result.type as keyof typeof configs]
 
   return (
-    <div
-      className={cn(
-        'relative rounded-2xl border-2 p-5 transition-all duration-300',
-        'animate-[fadeSlideUp_0.3s_ease-out]',
-        cfg.wrapper,
-      )}
-    >
-      <div className="flex items-start gap-4">
-        {/* Icon */}
-        <div className={cn(
-          'shrink-0 rounded-full p-2',
-          result.type === 'success'   && 'bg-green-100 dark:bg-green-900/50 animate-[pulse_1s_ease-in-out_2]',
-          result.type === 'duplicate' && 'bg-amber-100 dark:bg-amber-900/50',
-          (result.type === 'not_found' || result.type === 'error') && 'bg-red-100 dark:bg-red-900/50',
-        )}>
-          {cfg.icon}
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h3 className={cn('text-base font-bold leading-tight', cfg.titleCls)}>
-            {cfg.title}
-          </h3>
-
-          {result.type === 'success' && (
-            <div className="mt-2 space-y-1.5">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={cn('px-2.5 py-0.5 rounded-full text-sm font-semibold', cfg.badgeCls)}>
-                  {result.invitation.name}
-                </span>
-                {result.invitation.category !== 'general' && (
-                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 uppercase tracking-wide">
-                    {result.invitation.category}
                   </span>
                 )}
               </div>
