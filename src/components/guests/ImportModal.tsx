@@ -152,7 +152,7 @@ export function ImportModal({ open, onClose, onImport }: ImportModalProps) {
                   <ul className="mt-1 space-y-0.5">
                     {valid.slice(0, 3).map((r, i) => (
                       <li key={i} className="text-xs text-green-600 dark:text-green-400">
-                        {r.name}{r.email ? ` — ${r.email}` : ''}{r.company ? ` (${r.company})` : ''}
+                        {r.name}{r.company ? ` — ${r.company}` : ''}
                       </li>
                     ))}
                     {valid.length > 3 && (

@@ -29,12 +29,7 @@ export const excelService = {
 
             const guest: ImportGuestRow = {
               name,
-              email: (row['Email'] || row['email'] || '').trim() || undefined,
-              phone: (row['Phone'] || row['phone'] || row['No HP'] || row['Telepon'] || '').trim() || undefined,
-              company: (row['Company'] || row['company'] || row['Perusahaan'] || '').trim() || undefined,
-              table_number: (row['Table'] || row['table_number'] || row['Meja'] || '').trim() || undefined,
-              seat_number: (row['Seat'] || row['seat_number'] || row['Kursi'] || '').trim() || undefined,
-              notes: (row['Notes'] || row['notes'] || row['Catatan'] || '').trim() || undefined,
+              company: (row['Alamat'] || row['alamat'] || row['Company'] || row['company'] || '').trim() || undefined,
               _rowIndex: idx + 2,
               _errors: errors,
             }
@@ -59,10 +54,10 @@ export const excelService = {
   // Download a blank import template
   downloadTemplate() {
     const ws = XLSX.utils.aoa_to_sheet([
-      ['Name', 'Email', 'Phone', 'Company', 'Table', 'Seat', 'Notes'],
-      ['John Doe', 'john@example.com', '+1234567890', 'Acme Corp', 'A1', '1', ''],
+      ['Nama', 'Alamat'],
+      ['John Doe', 'Jl. Raya No. 123'],
     ])
-    ws['!cols'] = [20, 25, 18, 20, 10, 10, 30].map((w) => ({ wch: w }))
+    ws['!cols'] = [25, 40].map((w) => ({ wch: w }))
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Guests')
     const buffer = XLSX.write(wb, { type: 'array', bookType: 'xlsx' })
@@ -75,21 +70,16 @@ export const excelService = {
   // Export guest list to Excel
   exportGuests(guests: Guest[], eventName: string) {
     const rows = guests.map((g) => ({
-      Name: g.name,
-      Email: g.email || '',
-      Phone: g.phone || '',
-      Company: g.company || '',
-      Table: g.table_number || '',
-      Seat: g.seat_number || '',
+      Nama: g.name,
+      Alamat: g.company || '',
       'QR Code': g.qr_code,
       'Checked In': g.checked_in ? 'Yes' : 'No',
       'Check-in Time': g.checked_in_at ? formatDateTime(g.checked_in_at) : '',
-      Notes: g.notes || '',
       'Registered At': formatDateTime(g.created_at),
     }))
 
     const ws = XLSX.utils.json_to_sheet(rows)
-    ws['!cols'] = [20, 25, 18, 20, 10, 10, 36, 12, 22, 20, 22].map((w) => ({ wch: w }))
+    ws['!cols'] = [25, 40, 36, 12, 22, 22].map((w) => ({ wch: w }))
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Guests')
     const buffer = XLSX.write(wb, { type: 'array', bookType: 'xlsx' })
