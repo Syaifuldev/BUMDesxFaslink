@@ -293,6 +293,13 @@ BEGIN
     NOW(), NOW()
   );
 
+  -- Insert into auth.identities to allow login
+  INSERT INTO auth.identities (
+    id, user_id, provider_id, identity_data, provider, created_at, updated_at
+  ) VALUES (
+    gen_random_uuid(), v_user_id, v_user_id::text, jsonb_build_object('sub', v_user_id, 'email', v_email), 'email', NOW(), NOW()
+  );
+
   RETURN v_user_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

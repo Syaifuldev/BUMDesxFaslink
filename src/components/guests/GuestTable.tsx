@@ -82,10 +82,7 @@ export function GuestTable({
               <ThButton field="name">Guest</ThButton>
             </th>
             <th className="hidden md:table-cell px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">
-              <ThButton field="company">Company</ThButton>
-            </th>
-            <th className="hidden lg:table-cell px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">
-              Table / Seat
+              <ThButton field="company">Alamat</ThButton>
             </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">
               <ThButton field="checked_in">Status</ThButton>
@@ -110,18 +107,6 @@ export function GuestTable({
               <td className="px-4 py-3">
                 <div className="flex flex-col">
                   <span className="font-medium text-surface-900 dark:text-surface-100">{guest.name}</span>
-                  {guest.email && (
-                    <span className="flex items-center gap-1 text-xs text-surface-400 mt-0.5">
-                      <Mail className="h-3 w-3" />
-                      {truncate(guest.email, 30)}
-                    </span>
-                  )}
-                  {guest.phone && (
-                    <span className="flex items-center gap-1 text-xs text-surface-400">
-                      <Phone className="h-3 w-3" />
-                      {guest.phone}
-                    </span>
-                  )}
                 </div>
               </td>
               <td className="hidden md:table-cell px-4 py-3">
@@ -133,11 +118,6 @@ export function GuestTable({
                 ) : (
                   <span className="text-surface-300 dark:text-surface-600">—</span>
                 )}
-              </td>
-              <td className="hidden lg:table-cell px-4 py-3 text-surface-500 dark:text-surface-400">
-                {guest.table_number || guest.seat_number
-                  ? `${guest.table_number || '—'} / ${guest.seat_number || '—'}`
-                  : '—'}
               </td>
               <td className="px-4 py-3">
                 {guest.checked_in ? (
