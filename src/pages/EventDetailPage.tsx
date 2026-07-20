@@ -259,7 +259,7 @@ export default function EventDetailPage() {
       {/* Edit Modal */}
       <Modal open={!!editGuest} onClose={() => setEditGuest(null)} title="Edit Guest" size="md">
         <GuestForm
-          initialData={editGuest!}
+          guest={editGuest!}
           onSubmit={handleEdit}
           onCancel={() => setEditGuest(null)}
         />
