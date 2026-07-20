@@ -81,102 +81,118 @@ function ResultPanel({ result, onDismiss }: { result: ScanResult; onDismiss: () 
 
   const configs = {
     success: {
-      wrapper:  'border-green-400 dark:border-green-600 bg-green-50 dark:bg-green-900/25',
-      icon:     <CheckCircle2 className="h-10 w-10 text-green-500" />,
+      wrapper:  'border-green-400 dark:border-green-600',
+      icon:     <CheckCircle2 className="h-14 w-14 text-green-500" />,
       title:    'Berhasil Check-in! 🎉',
-      titleCls: 'text-green-800 dark:text-green-300',
-      badgeCls: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+      titleCls: 'text-green-700 dark:text-green-400',
+      badgeCls: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
     },
     duplicate: {
-      wrapper:  'border-amber-400 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/25',
-      icon:     <AlertTriangle className="h-10 w-10 text-amber-500" />,
-      title:    'Sudah Check-in Sebelumnya',
-      titleCls: 'text-amber-800 dark:text-amber-300',
-      badgeCls: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',
+      wrapper:  'border-amber-400 dark:border-amber-600',
+      icon:     <AlertTriangle className="h-14 w-14 text-amber-500" />,
+      title:    'Sudah Check-in',
+      titleCls: 'text-amber-700 dark:text-amber-400',
+      badgeCls: 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300',
     },
     not_found: {
-      wrapper:  'border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-900/25',
-      icon:     <XCircle className="h-10 w-10 text-red-500" />,
-      title:    'Kode QR Tidak Ditemukan',
-      titleCls: 'text-red-800 dark:text-red-300',
-      badgeCls: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+      wrapper:  'border-red-400 dark:border-red-600',
+      icon:     <XCircle className="h-14 w-14 text-red-500" />,
+      title:    'QR Tidak Ditemukan',
+      titleCls: 'text-red-700 dark:text-red-400',
+      badgeCls: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300',
     },
     error: {
-      wrapper:  'border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-900/25',
-      icon:     <XCircle className="h-10 w-10 text-red-500" />,
+      wrapper:  'border-red-400 dark:border-red-600',
+      icon:     <XCircle className="h-14 w-14 text-red-500" />,
       title:    'Terjadi Kesalahan',
-      titleCls: 'text-red-800 dark:text-red-300',
-      badgeCls: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+      titleCls: 'text-red-700 dark:text-red-400',
+      badgeCls: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300',
     },
   } as const
 
   const cfg = configs[result.type as keyof typeof configs]
 
   return (
-                  </span>
-                )}
-              </div>
-              {result.invitation.company && (
-                <p className="text-sm text-green-700 dark:text-green-400 truncate">
-                  🏢 {result.invitation.company}
-                </p>
-              )}
-              {(result.invitation.table_number || result.invitation.seat_number) && (
-                <p className="text-sm text-green-700 dark:text-green-400">
-                  🪑 Meja {result.invitation.table_number ?? '—'} · Kursi {result.invitation.seat_number ?? '—'}
-                </p>
-              )}
-              <p className="text-xs text-green-600 dark:text-green-500 flex items-center gap-1 mt-1">
-                <Clock className="h-3.5 w-3.5" />
-                {formatDateTime(result.checkedInAt)}
-              </p>
-            </div>
-          )}
-
-          {result.type === 'duplicate' && (
-            <div className="mt-2 space-y-1.5">
-              <p className={cn('text-sm font-semibold', cfg.titleCls)}>
-                {result.invitation.name}
-              </p>
-              {result.invitation.company && (
-                <p className="text-sm text-amber-700 dark:text-amber-400">
-                  🏢 {result.invitation.company}
-                </p>
-              )}
-              <div className={cn('mt-2 rounded-xl px-3 py-2 text-sm', cfg.badgeCls)}>
-                <p className="font-medium">Waktu check-in sebelumnya:</p>
-                <p className="text-sm flex items-center gap-1 mt-0.5">
-                  <Clock className="h-3.5 w-3.5" />
-                  {formatDateTime(result.previousAt)}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {result.type === 'not_found' && (
-            <div className="mt-2 space-y-1">
-              <p className="text-sm text-red-700 dark:text-red-400">
-                Kode QR tidak terdaftar dalam sistem untuk acara ini.
-              </p>
-              <p className="text-xs text-red-500 dark:text-red-500 font-mono truncate opacity-70">
-                Token: {result.qrToken.slice(0, 20)}…
-              </p>
-            </div>
-          )}
-
-          {result.type === 'error' && (
-            <p className="mt-1 text-sm text-red-700 dark:text-red-400">{result.message}</p>
-          )}
-        </div>
-      </div>
-
-      {/* Dismiss button */}
-      <button
-        onClick={onDismiss}
-        className="absolute top-3 right-3 text-xs text-surface-400 hover:text-surface-600 dark:hover:text-surface-200 px-2 py-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 animate-in fade-in duration-200">
+      <div
+        className={cn(
+          'relative w-full max-w-sm rounded-3xl border-2 p-6 shadow-2xl transition-all duration-300 animate-in zoom-in-95 bg-white dark:bg-surface-900',
+          cfg.wrapper
+        )}
       >
-        Tutup
-      </button>
+        <div className="flex flex-col items-center text-center gap-4">
+          {/* Icon */}
+          <div className={cn(
+            'shrink-0 rounded-full p-4',
+            result.type === 'success'   && 'bg-green-50 dark:bg-green-900/20 animate-[pulse_1s_ease-in-out_2]',
+            result.type === 'duplicate' && 'bg-amber-50 dark:bg-amber-900/20 animate-bounce',
+            (result.type === 'not_found' || result.type === 'error') && 'bg-red-50 dark:bg-red-900/20',
+          )}>
+            {cfg.icon}
+          </div>
+
+          {/* Content */}
+          <div className="space-y-3 w-full">
+            <h3 className={cn('text-2xl font-black leading-tight', cfg.titleCls)}>
+              {cfg.title}
+            </h3>
+
+            {result.type === 'success' && (
+              <div className="space-y-2 mt-4">
+                <div className={cn('inline-block px-5 py-2 rounded-full text-xl font-bold', cfg.badgeCls)}>
+                  {result.invitation.name}
+                </div>
+                {result.invitation.company && (
+                  <p className="text-base font-semibold text-surface-600 dark:text-surface-300">
+                    🏢 {result.invitation.company}
+                  </p>
+                )}
+                <div className="flex items-center justify-center gap-1.5 text-sm text-surface-500 mt-2">
+                  <Clock className="h-4 w-4" />
+                  Berhasil pada {new Date(result.checkedInAt).toLocaleTimeString('id-ID')}
+                </div>
+              </div>
+            )}
+
+            {result.type === 'duplicate' && (
+              <div className="space-y-2 mt-4">
+                <div className={cn('inline-block px-5 py-2 rounded-full text-xl font-bold', cfg.badgeCls)}>
+                  {result.invitation.name}
+                </div>
+                {result.invitation.company && (
+                  <p className="text-base font-semibold text-surface-600 dark:text-surface-300">
+                    🏢 {result.invitation.company}
+                  </p>
+                )}
+                <div className="flex items-center justify-center gap-1.5 text-sm font-medium text-amber-700 dark:text-amber-400 mt-3 bg-amber-100 dark:bg-amber-900/30 py-2 px-4 rounded-xl inline-flex">
+                  <Clock className="h-4 w-4" />
+                  Sudah masuk jam {new Date(result.previousAt).toLocaleTimeString('id-ID')}
+                </div>
+              </div>
+            )}
+
+            {result.type === 'not_found' && (
+              <p className="text-sm text-red-600 dark:text-red-400 mt-2 font-mono bg-red-100 dark:bg-red-900/30 py-2 px-3 rounded-lg overflow-hidden text-ellipsis whitespace-nowrap">
+                QR: {result.qrToken}
+              </p>
+            )}
+
+            {result.type === 'error' && (
+              <p className="text-sm text-red-600 dark:text-red-400 mt-2 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                {result.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Dismiss button */}
+        <button
+          onClick={onDismiss}
+          className="absolute top-4 right-4 text-surface-400 hover:text-surface-600 dark:hover:text-surface-200 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+        >
+          <XCircle className="h-6 w-6" />
+        </button>
+      </div>
     </div>
   )
 }
