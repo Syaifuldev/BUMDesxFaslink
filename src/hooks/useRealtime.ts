@@ -24,9 +24,17 @@ export function useRealtime({
   onChange,
 }: UseRealtimeOptions) {
   const channelRef = useRef<RealtimeChannel | null>(null)
+  
+  // Keep the latest callbacks in a ref to avoid re-subscribing on every render
+  const callbacks = useRef({ onInsert, onUpdate, onDelete, onChange })
+  useEffect(() => {
+    callbacks.current = { onInsert, onUpdate, onDelete, onChange }
+  }, [onInsert, onUpdate, onDelete, onChange])
 
   useEffect(() => {
-    const channelName = `${table}${filter ? `:${filter}` : ''}:${Date.now()}`
+    // Generate a truly unique name to prevent collisions during rapid re-renders (like Strict Mode)
+    const uniqueId = Math.random().toString(36).substring(2, 10)
+    const channelName = `${table}${filter ? `:${filter}` : ''}:${Date.now()}:${uniqueId}`
     let channel = supabase.channel(channelName)
 
     const pgChangesConfig = {
@@ -41,10 +49,11 @@ export function useRealtime({
       pgChangesConfig,
       (payload) => {
         const record = (payload.new || payload.old || {}) as Record<string, unknown>
-        onChange?.(record)
-        if (payload.eventType === 'INSERT') onInsert?.(record)
-        if (payload.eventType === 'UPDATE') onUpdate?.(record)
-        if (payload.eventType === 'DELETE') onDelete?.(record)
+        const cb = callbacks.current
+        cb.onChange?.(record)
+        if (payload.eventType === 'INSERT') cb.onInsert?.(record)
+        if (payload.eventType === 'UPDATE') cb.onUpdate?.(record)
+        if (payload.eventType === 'DELETE') cb.onDelete?.(record)
       }
     )
 
@@ -54,7 +63,8 @@ export function useRealtime({
     return () => {
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current)
+        channelRef.current = null
       }
     }
-  }, [table, filter, onInsert, onUpdate, onDelete, onChange])
+  }, [table, filter]) // Only re-subscribe if table or filter changes
 }
