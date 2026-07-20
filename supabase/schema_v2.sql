@@ -228,11 +228,23 @@ CREATE TRIGGER update_guests_updated_at
 
 
 -- =====================
--- ENABLE REALTIME
+-- ENABLE REALTIME (Idempotent)
 -- =====================
-ALTER PUBLICATION supabase_realtime ADD TABLE public.guests;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.checkin_logs;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.events;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'guests') THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.guests;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'checkin_logs') THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.checkin_logs;
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'events') THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.events;
+  END IF;
+END
+$$;
 
 
 -- =====================
