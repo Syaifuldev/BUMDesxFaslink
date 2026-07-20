@@ -75,15 +75,7 @@ export function useGuests(eventId: string) {
     try {
       const updated = await guestsService.checkIn(guestId, method)
       setGuests((prev) => prev.map((g) => (g.id === guestId ? updated : g)))
-      // Log the check-in
-      if (user) {
-        await checkinService.logCheckin({
-          guestId,
-          eventId,
-          method,
-          checkedInBy: user.id,
-        })
-      }
+      // Legacy logCheckin removed (guests table is source of truth)
       toast.success('Guest checked in! ✓')
       return updated
     } catch (err) {
