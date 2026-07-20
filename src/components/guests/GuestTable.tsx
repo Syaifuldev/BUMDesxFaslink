@@ -25,7 +25,7 @@ type SortField = 'name' | 'company' | 'checked_in' | 'created_at'
 type SortDir = 'asc' | 'desc'
 
 export function GuestTable({
-  guests, loading, onEdit, onDelete, onCheckIn, onUndoCheckIn, onShowQR,
+  guests, loading, onEdit, onDelete, onCheckIn, onUndoCheckIn, onShowQR, onPrint
 }: GuestTableProps) {
   const [sort, setSort] = useState<{ field: SortField; dir: SortDir }>({ field: 'created_at', dir: 'asc' })
 
