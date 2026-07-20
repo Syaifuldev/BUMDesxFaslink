@@ -15,7 +15,6 @@ class EventsService {
         *,
         guests(count)
       `)
-      .eq('user_id', userId)
       .order('date', { ascending: false })
 
     if (error) throw new Error(error.message)
@@ -112,7 +111,6 @@ class EventsService {
     const { data: events, error: evErr } = await supabase
       .from('events')
       .select('id, status')
-      .eq('user_id', userId)
 
     if (evErr) throw new Error(evErr.message)
     const evts = events ?? []

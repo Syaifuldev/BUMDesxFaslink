@@ -28,7 +28,7 @@ export default function LoginPage() {
       navigate('/')
     } catch (err: any) {
       console.error('Login error:', err)
-      const msg = err?.message || (typeof err === 'string' ? err : 'Login failed')
+      const msg = String(err?.message || (typeof err === 'string' ? err : 'Login failed'))
       toast.error(msg)
     }
   }
