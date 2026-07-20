@@ -56,14 +56,14 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full max-w-3xl border relative">
               <div className="text-center mb-6 border-b-2 border-black pb-4">
                 {/* Logos */}
-                <div className="absolute top-4 left-4 sm:top-6 sm:left-8">
-                  <img src="/bumdes_logo.png" alt="BUMDes Logo" className="h-12 w-12 object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+                <div className="absolute top-4 left-4 sm:top-6 sm:left-8 flex items-center justify-start h-12 w-24 sm:h-14 sm:w-28">
+                  <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
                 </div>
-                <div className="absolute top-4 right-4 sm:top-6 sm:right-8">
-                  <img src="/fastlink_logo.png" alt="Fastlink Logo" className="h-12 w-auto object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-8 flex items-center justify-end h-12 w-24 sm:h-14 sm:w-28">
+                  <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
                 </div>
 
-                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider mt-4">KARTU UNDANGAN</h1>
+                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider mt-6 sm:mt-4">KARTU UNDANGAN</h1>
                 <h2 className="text-lg sm:text-xl font-bold mt-1 text-gray-800">{event.name}</h2>
               </div>
               
@@ -129,14 +129,14 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                 <div className="w-[180mm] max-w-full border-2 border-black p-6 relative">
                   <div className="text-center mb-6 border-b-4 border-black pb-4">
                     {/* Logos */}
-                    <div className="absolute top-4 left-4">
-                      <img src="/bumdes_logo.png" alt="BUMDes Logo" className="h-14 w-14 object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+                    <div className="absolute top-4 left-4 flex items-center justify-start h-14 w-28">
+                      <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
                     </div>
-                    <div className="absolute top-4 right-4">
-                      <img src="/fastlink_logo.png" alt="Fastlink Logo" className="h-14 w-auto object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+                    <div className="absolute top-4 right-4 flex items-center justify-end h-14 w-28">
+                      <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
                     </div>
 
-                    <h1 className="text-2xl font-black uppercase tracking-widest mt-4">KARTU UNDANGAN</h1>
+                    <h1 className="text-2xl font-black uppercase tracking-widest mt-6">KARTU UNDANGAN</h1>
                     <h2 className="text-lg font-bold mt-1 text-gray-800 uppercase">{event.name}</h2>
                   </div>
                   
