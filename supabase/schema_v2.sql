@@ -327,3 +327,22 @@ BEGIN
   DELETE FROM auth.users WHERE id = p_operator_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+
+-- =====================
+-- REALTIME CONFIGURATION
+-- =====================
+-- Safely add 'guests' to the supabase_realtime publication
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND tablename = 'guests'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.guests;
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Failed to add to realtime publication';
+END
+$$;

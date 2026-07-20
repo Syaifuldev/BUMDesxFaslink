@@ -51,7 +51,7 @@ export default function CheckinHistoryPage() {
   useEffect(() => { fetchLogs() }, [fetchLogs])
 
   // Realtime updates
-  useRealtime({ table: 'checkin_logs', onInsert: () => fetchLogs() })
+  useRealtime({ table: 'guests', onUpdate: () => fetchLogs() })
 
   const filtered = useMemo(() => {
     return logs

@@ -28,8 +28,8 @@ export function RecentCheckins() {
 
   // Realtime: refetch on new check-in
   useRealtime({
-    table: 'checkin_logs',
-    onInsert: () => fetchLogs(),
+    table: 'guests',
+    onUpdate: () => fetchLogs(),
   })
 
   return (
