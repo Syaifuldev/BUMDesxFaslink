@@ -29,8 +29,7 @@ DROP POLICY IF EXISTS "Users can view related profiles" ON public.profiles;
 CREATE POLICY "Users can view related profiles" ON public.profiles FOR SELECT
   USING (
     id = auth.uid() OR
-    parent_id = auth.uid() OR
-    id = (SELECT parent_id FROM public.profiles WHERE id = auth.uid())
+    parent_id = auth.uid()
   );
 
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
