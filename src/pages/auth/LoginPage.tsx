@@ -22,7 +22,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const mappedEmail = `${data.username}@app.local`
+      const mappedEmail = `${data.username}@guestsync.app`
       await authService.signIn(mappedEmail, data.password)
       toast.success('Welcome back!')
       navigate('/')

@@ -251,7 +251,7 @@ BEGIN
   END IF;
 
   v_user_id := gen_random_uuid();
-  v_email := p_username || '@app.local';
+  v_email := p_username || '@guestsync.app';
 
   -- Check if username already exists
   IF EXISTS (SELECT 1 FROM auth.users WHERE email = v_email) THEN

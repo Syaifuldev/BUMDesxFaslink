@@ -22,7 +22,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const mappedEmail = `${data.username}@app.local`
+      const mappedEmail = `${data.username}@guestsync.app`
       await authService.signUp(mappedEmail, data.password, data.full_name)
       toast.success('Account created! You can now sign in.')
       navigate('/login')
