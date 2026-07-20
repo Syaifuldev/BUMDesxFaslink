@@ -337,19 +337,18 @@ export default function ScannerPage() {
     if (!eventId) return
     setStatsLoading(true)
     try {
-      // Count total invitations
+      // Count total guests
       const { count: total } = await supabase
-        .from('invitations')
+        .from('guests')
         .select('*', { count: 'exact', head: true })
         .eq('event_id', eventId)
-        .is('deleted_at', null)
 
-      // Count checked-in (has active checkin row)
+      // Count checked-in
       const { count: checkedIn } = await supabase
-        .from('checkins')
+        .from('guests')
         .select('*', { count: 'exact', head: true })
         .eq('event_id', eventId)
-        .is('checked_out_at', null)
+        .eq('checked_in', true)
 
       setStats({
         total:     total     ?? 0,
@@ -378,16 +377,15 @@ export default function ScannerPage() {
     if (restartTimerRef.current) clearTimeout(restartTimerRef.current)
 
     try {
-      // ── Step 1: Resolve QR token → invitation ────────────
-      const { data: invitation, error: invErr } = await supabase
-        .from('invitations')
+      // ── Step 1: Resolve QR token → guest ────────────
+      const { data: guest, error: invErr } = await supabase
+        .from('guests')
         .select('*')
-        .eq('qr_token', qrToken)
+        .eq('qr_code', qrToken)
         .eq('event_id', selectedEventId)
-        .is('deleted_at', null)
         .single()
 
-      if (invErr || !invitation) {
+      if (invErr || !guest) {
         setScanResult({ type: 'not_found', qrToken })
         isSoundEnabled && playErrorSound()
         scheduleRestart()
@@ -395,18 +393,11 @@ export default function ScannerPage() {
       }
 
       // ── Step 2: Check for existing active check-in ────────
-      const { data: existingCheckin } = await supabase
-        .from('checkins')
-        .select('checked_in_at')
-        .eq('invitation_id', invitation.id)
-        .is('checked_out_at', null)
-        .maybeSingle()
-
-      if (existingCheckin) {
+      if (guest.checked_in) {
         setScanResult({
           type:       'duplicate',
-          invitation: invitation as InvitationRow,
-          previousAt: existingCheckin.checked_in_at,
+          invitation: guest as any,
+          previousAt: guest.checked_in_at || new Date().toISOString(),
         })
         isSoundEnabled && playWarningSound()
         scheduleRestart()
@@ -416,30 +407,17 @@ export default function ScannerPage() {
       // ── Step 3: Perform check-in ─────────────────────────
       const now = new Date().toISOString()
 
-      const { data: checkinRow, error: checkinErr } = await supabase
-        .from('checkins')
-        .insert({
-          invitation_id:  invitation.id,
-          event_id:       selectedEventId,
-          checked_in_at:  now,
-          method:         'qr',
-          device_info:    buildDeviceInfo(),
-        })
-        .select()
-        .single()
+      const { error: checkinErr } = await supabase
+        .from('guests')
+        .update({ checked_in: true, checked_in_at: now })
+        .eq('id', guest.id)
 
       if (checkinErr) throw new Error(checkinErr.message)
 
-      // ── Step 4: Update invitation status → accepted ───────
-      await supabase
-        .from('invitations')
-        .update({ status: 'accepted', rsvp_at: now })
-        .eq('id', invitation.id)
-
       setScanResult({
         type:        'success',
-        invitation:  invitation as InvitationRow,
-        checkedInAt: checkinRow?.checked_in_at ?? now,
+        invitation:  guest as any,
+        checkedInAt: now,
       })
       isSoundEnabled && playSuccessSound()
 
