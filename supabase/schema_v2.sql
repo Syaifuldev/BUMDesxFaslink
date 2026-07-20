@@ -25,6 +25,7 @@ CREATE INDEX IF NOT EXISTS idx_profiles_role ON public.profiles(role);
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view related profiles" ON public.profiles;
 CREATE POLICY "Users can view related profiles" ON public.profiles FOR SELECT
   USING (
     id = auth.uid() OR
@@ -32,9 +33,11 @@ CREATE POLICY "Users can view related profiles" ON public.profiles FOR SELECT
     id = (SELECT parent_id FROM public.profiles WHERE id = auth.uid())
   );
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Superadmin can delete operators" ON public.profiles;
 CREATE POLICY "Superadmin can delete operators" ON public.profiles FOR DELETE
   USING (parent_id = auth.uid() AND role = 'operator');
 
@@ -80,9 +83,11 @@ CREATE TABLE IF NOT EXISTS public.events (
 
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Superadmins can manage their events" ON public.events;
 CREATE POLICY "Superadmins can manage their events" ON public.events FOR ALL
   USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Operators can view parent events" ON public.events;
 CREATE POLICY "Operators can view parent events" ON public.events FOR SELECT
   USING (
     user_id = (SELECT parent_id FROM public.profiles WHERE id = auth.uid() AND role = 'operator')
@@ -115,6 +120,7 @@ CREATE TABLE IF NOT EXISTS public.guests (
 
 ALTER TABLE public.guests ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users and Operators can view guests" ON public.guests;
 CREATE POLICY "Users and Operators can view guests" ON public.guests FOR SELECT
   USING (
     EXISTS (
@@ -127,6 +133,7 @@ CREATE POLICY "Users and Operators can view guests" ON public.guests FOR SELECT
     )
   );
 
+DROP POLICY IF EXISTS "Operators can update guest checkin status" ON public.guests;
 CREATE POLICY "Operators can update guest checkin status" ON public.guests FOR UPDATE
   USING (
     EXISTS (
@@ -136,6 +143,7 @@ CREATE POLICY "Operators can update guest checkin status" ON public.guests FOR U
     )
   );
 
+DROP POLICY IF EXISTS "Superadmins can manage guests" ON public.guests;
 CREATE POLICY "Superadmins can manage guests" ON public.guests FOR ALL
   USING (EXISTS (SELECT 1 FROM public.events WHERE events.id = guests.event_id AND events.user_id = auth.uid()));
 
@@ -160,6 +168,7 @@ CREATE TABLE IF NOT EXISTS public.checkin_logs (
 
 ALTER TABLE public.checkin_logs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users and Operators can view checkin logs" ON public.checkin_logs;
 CREATE POLICY "Users and Operators can view checkin logs" ON public.checkin_logs FOR SELECT
   USING (
     EXISTS (
@@ -172,6 +181,7 @@ CREATE POLICY "Users and Operators can view checkin logs" ON public.checkin_logs
     )
   );
 
+DROP POLICY IF EXISTS "Operators can insert checkin logs" ON public.checkin_logs;
 CREATE POLICY "Operators can insert checkin logs" ON public.checkin_logs FOR INSERT
   WITH CHECK (
     EXISTS (
@@ -181,6 +191,7 @@ CREATE POLICY "Operators can insert checkin logs" ON public.checkin_logs FOR INS
     )
   );
 
+DROP POLICY IF EXISTS "Superadmins can manage checkin logs" ON public.checkin_logs;
 CREATE POLICY "Superadmins can manage checkin logs" ON public.checkin_logs FOR ALL
   USING (EXISTS (SELECT 1 FROM public.events WHERE events.id = checkin_logs.event_id AND events.user_id = auth.uid()));
 
