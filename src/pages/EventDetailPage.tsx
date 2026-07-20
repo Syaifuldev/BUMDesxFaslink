@@ -7,6 +7,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { GuestTable } from '@/components/guests/GuestTable'
 import { GuestForm } from '@/components/guests/GuestForm'
 import { ImportModal } from '@/components/guests/ImportModal'
+import { InvitationPrintModal } from '@/components/guests/InvitationPrintModal'
 import { QRCodeDisplay } from '@/components/qr/QRCodeDisplay'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
@@ -41,6 +42,7 @@ export default function EventDetailPage() {
   const [editGuest, setEditGuest] = useState<Guest | null>(null)
   const [deleteGuest, setDeleteGuest] = useState<Guest | null>(null)
   const [importOpen, setImportOpen] = useState(false)
+  const [printGuest, setPrintGuest] = useState<Guest | null>(null)
   const [qrGuest, setQrGuest] = useState<Guest | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [statusFilter, setStatusFilter] = useState<'all' | 'checked' | 'pending'>('all')
@@ -225,6 +227,7 @@ export default function EventDetailPage() {
           onCheckIn={(g) => checkInGuest(g.id, 'manual')}
           onUndoCheckIn={(g) => undoCheckIn(g.id)}
           onShowQR={setQrGuest}
+          onPrint={setPrintGuest}
         />
 
         {/* Pagination */}
@@ -272,6 +275,14 @@ export default function EventDetailPage() {
 
       {/* QR Code Modal */}
       <QRCodeDisplay guest={qrGuest} open={!!qrGuest} onClose={() => setQrGuest(null)} />
+
+      {/* Print Invitation Modal */}
+      <InvitationPrintModal 
+        guest={printGuest} 
+        event={event} 
+        open={!!printGuest} 
+        onClose={() => setPrintGuest(null)} 
+      />
     </AppLayout>
   )
 }

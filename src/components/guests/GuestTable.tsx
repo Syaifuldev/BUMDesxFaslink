@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  Edit, Trash2, QrCode, CheckCircle2, XCircle, ChevronUp, ChevronDown, Mail, Phone, Building2,
+  Edit, Trash2, QrCode, CheckCircle2, XCircle, ChevronUp, ChevronDown, Mail, Phone, Building2, Printer
 } from 'lucide-react'
 import type { Guest } from '@/types'
 import { Badge } from '@/components/ui/Badge'
@@ -18,6 +18,7 @@ interface GuestTableProps {
   onCheckIn: (guest: Guest) => void
   onUndoCheckIn: (guest: Guest) => void
   onShowQR: (guest: Guest) => void
+  onPrint?: (guest: Guest) => void
 }
 
 type SortField = 'name' | 'company' | 'checked_in' | 'created_at'
@@ -131,6 +132,13 @@ export function GuestTable({
               </td>
               <td className="px-4 py-3">
                 <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => onPrint?.(guest)}
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-surface-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                    title="Print Invitation"
+                  >
+                    <Printer className="h-4 w-4" />
+                  </button>
                   <button
                     onClick={() => onShowQR(guest)}
                     className="flex h-7 w-7 items-center justify-center rounded-lg text-surface-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
