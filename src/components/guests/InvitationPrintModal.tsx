@@ -43,43 +43,43 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
             </>
           }
         >
-          <div className="p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center">
+          <div className="p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-x-auto flex justify-center w-full">
             {/* Preview Card */}
-            <div className="bg-white text-black p-8 shadow-sm w-full max-w-2xl border relative">
-              <div className="text-center mb-8 border-b-2 border-black pb-4">
-                <h1 className="text-2xl font-black uppercase tracking-wider">KARTU UNDANGAN</h1>
-                <h2 className="text-xl font-bold mt-1 text-gray-800">{event.name}</h2>
+            <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full min-w-[600px] max-w-3xl border relative">
+              <div className="text-center mb-6 border-b-2 border-black pb-4">
+                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider">KARTU UNDANGAN</h1>
+                <h2 className="text-lg sm:text-xl font-bold mt-1 text-gray-800">{event.name}</h2>
               </div>
               
-              <div className="flex flex-col md:flex-row gap-8 items-center md:items-start justify-between">
-                <div className="flex-1 space-y-4 text-lg">
+              <div className="flex flex-row gap-6 items-start justify-between">
+                <div className="flex-1 space-y-4 text-base sm:text-lg">
                   <div>
-                    <p className="text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
-                    <p className="font-bold text-xl">{guest.name}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
+                    <p className="font-bold text-lg sm:text-xl">{guest.name}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500 font-semibold uppercase">Alamat / Instansi</p>
+                    <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat / Instansi</p>
                     <p className="font-medium text-gray-800">{guest.company || '-'}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500 font-semibold uppercase">Waktu & Tempat</p>
+                    <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Waktu & Tempat</p>
                     <p className="font-medium text-gray-800">{hari}, {tanggal}</p>
                     {event.location && <p className="font-medium text-gray-800">{event.location}</p>}
                   </div>
                 </div>
 
-                <div className="shrink-0 flex flex-col items-center p-4 border-2 border-dashed border-gray-300 rounded-xl">
-                  <QRCodeSVG value={guest.qr_code} size={150} level="H" includeMargin />
-                  <p className="text-xs text-center mt-2 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
+                <div className="shrink-0 flex flex-col items-center p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-xl">
+                  <QRCodeSVG value={guest.qr_code} size={120} level="H" includeMargin />
+                  <p className="text-[10px] sm:text-xs text-center mt-2 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
                 </div>
               </div>
 
-              <div className="mt-12 flex justify-end">
+              <div className="mt-8 sm:mt-12 flex justify-end">
                 <div className="text-center">
-                  <p className="text-sm text-gray-800 mb-16">Direktur BUMDes Padas Jaya,</p>
-                  <p className="font-bold text-lg underline">Ferry Tri Sukarno</p>
+                  <p className="text-xs sm:text-sm text-gray-800 mb-12 sm:mb-16">Direktur BUMDes Padas Jaya,</p>
+                  <p className="font-bold text-base sm:text-lg underline">Ferry Tri Sukarno</p>
                 </div>
               </div>
             </div>
@@ -89,44 +89,52 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
 
       {/* ── PRINT ONLY VIEW ──────────────────────────────────────── */}
       {open && (
-        <div className="hidden print:block fixed inset-0 bg-white z-[9999] text-black">
-          <div className="w-full h-full p-10 print:p-0 flex items-center justify-center">
-            {/* The actual A4 or Card size for print */}
-            <div className="w-[800px] border-2 border-black p-10 relative">
-              <div className="text-center mb-10 border-b-4 border-black pb-6">
-                <h1 className="text-4xl font-black uppercase tracking-widest">KARTU UNDANGAN</h1>
-                <h2 className="text-2xl font-bold mt-2 text-gray-800 uppercase">{event.name}</h2>
+        <div className="hidden print:block fixed inset-0 bg-white z-[9999] text-black w-full h-full m-0 p-0">
+          <style>
+            {`
+              @media print {
+                @page { margin: 1cm; size: landscape; }
+                body { margin: 0; padding: 0; }
+              }
+            `}
+          </style>
+          <div className="w-full flex items-center justify-center p-4">
+            {/* Fluid layout for print to prevent cutoff */}
+            <div className="w-full max-w-full border-2 border-black p-8 relative">
+              <div className="text-center mb-8 border-b-4 border-black pb-6">
+                <h1 className="text-3xl font-black uppercase tracking-widest">KARTU UNDANGAN</h1>
+                <h2 className="text-xl font-bold mt-2 text-gray-800 uppercase">{event.name}</h2>
               </div>
               
-              <div className="flex gap-10 items-start justify-between">
+              <div className="flex gap-8 items-start justify-between">
                 <div className="flex-1 space-y-6 text-xl">
                   <div>
-                    <p className="text-base text-gray-600 font-bold uppercase tracking-wider mb-1">Nama Tamu</p>
-                    <p className="font-black text-3xl">{guest.name}</p>
+                    <p className="text-sm text-gray-600 font-bold uppercase tracking-wider mb-1">Nama Tamu</p>
+                    <p className="font-black text-2xl">{guest.name}</p>
                   </div>
                   
                   <div>
-                    <p className="text-base text-gray-600 font-bold uppercase tracking-wider mb-1">Alamat / Instansi</p>
-                    <p className="font-bold text-2xl text-gray-800">{guest.company || '-'}</p>
+                    <p className="text-sm text-gray-600 font-bold uppercase tracking-wider mb-1">Alamat / Instansi</p>
+                    <p className="font-bold text-xl text-gray-800">{guest.company || '-'}</p>
                   </div>
                   
                   <div>
-                    <p className="text-base text-gray-600 font-bold uppercase tracking-wider mb-1">Waktu & Tempat</p>
-                    <p className="font-bold text-2xl text-gray-800">{hari}, {tanggal}</p>
-                    <p className="font-bold text-xl text-gray-700 mt-1">{event.location || '-'}</p>
+                    <p className="text-sm text-gray-600 font-bold uppercase tracking-wider mb-1">Waktu & Tempat</p>
+                    <p className="font-bold text-xl text-gray-800">{hari}, {tanggal}</p>
+                    <p className="font-bold text-lg text-gray-700 mt-1">{event.location || '-'}</p>
                   </div>
                 </div>
 
-                <div className="shrink-0 flex flex-col items-center p-6 border-4 border-black rounded-2xl bg-white">
-                  <QRCodeSVG value={guest.qr_code} size={220} level="H" includeMargin />
-                  <p className="text-sm text-center mt-3 font-bold tracking-widest text-black">SCAN UNTUK MASUK</p>
+                <div className="shrink-0 flex flex-col items-center p-4 border-4 border-black rounded-2xl bg-white">
+                  <QRCodeSVG value={guest.qr_code} size={180} level="H" includeMargin />
+                  <p className="text-xs text-center mt-3 font-bold tracking-widest text-black">SCAN UNTUK MASUK</p>
                 </div>
               </div>
 
-              <div className="mt-20 flex justify-end pr-10">
+              <div className="mt-16 flex justify-end pr-8">
                 <div className="text-center">
-                  <p className="text-lg text-gray-800 font-medium mb-24">Direktur BUMDes Padas Jaya,</p>
-                  <p className="font-black text-2xl underline">Ferry Tri Sukarno</p>
+                  <p className="text-base text-gray-800 font-medium mb-20">Direktur BUMDes Padas Jaya,</p>
+                  <p className="font-black text-xl underline">Ferry Tri Sukarno</p>
                 </div>
               </div>
             </div>
