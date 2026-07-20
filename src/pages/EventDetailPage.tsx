@@ -42,7 +42,7 @@ export default function EventDetailPage() {
   const [editGuest, setEditGuest] = useState<Guest | null>(null)
   const [deleteGuest, setDeleteGuest] = useState<Guest | null>(null)
   const [importOpen, setImportOpen] = useState(false)
-  const [printGuest, setPrintGuest] = useState<Guest | null>(null)
+  const [printGuests, setPrintGuests] = useState<Guest[] | null>(null)
   const [qrGuest, setQrGuest] = useState<Guest | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [statusFilter, setStatusFilter] = useState<'all' | 'checked' | 'pending'>('all')
@@ -102,15 +102,22 @@ export default function EventDetailPage() {
   }
 
   const handleExport = () => {
-    if (!event) return
-    excelService.exportGuests(guests, event.name)
+    excelService.exportGuests(filtered, event?.name || 'event')
+  }
+
+  const handleBulkPrint = () => {
+    if (paginated.length > 0) {
+      setPrintGuests(paginated)
+    }
   }
 
   if (eventLoading) return <AppLayout title="Loading..."><PageSpinner /></AppLayout>
   if (!event) return <AppLayout title="Not Found"><p className="text-center py-10 text-surface-400">Event not found.</p></AppLayout>
 
-  const checkedIn = guests.filter((g) => g.checked_in).length
-  const rate = calculateCheckInRate(checkedIn, guests.length)
+  const checkInRate = calculateCheckInRate(
+    guests.filter((g) => g.checked_in).length,
+    guests.length
+  )
 
   return (
     <AppLayout
@@ -122,68 +129,53 @@ export default function EventDetailPage() {
           icon={<ArrowLeft className="h-4 w-4" />}
           onClick={() => navigate('/events')}
         >
-          Back
+          Back to Events
         </Button>
       }
     >
-      <div className="space-y-5">
-        {/* Event Header */}
-        <Card>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-bold text-surface-900 dark:text-surface-100">{event.name}</h2>
-                <Badge variant={statusVariant[event.status]} dot>
-                  {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-4 text-sm text-surface-500 dark:text-surface-400 flex-wrap">
-                <span>📅 {formatDate(event.date)}</span>
-                {event.time && <span>🕐 {formatTime(event.time)}</span>}
-                {event.location && <span>📍 {event.location}</span>}
-                {event.capacity && <span>🎯 Capacity: {event.capacity}</span>}
-              </div>
+      {/* Stats Cards */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3 mb-6">
+        <Card className="p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-xl">
+              <Users className="h-5 w-5" />
             </div>
-            {/* Stats mini */}
-            <div className="flex items-center gap-4 shrink-0">
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/30">
-                  <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-xs text-surface-500">Guests</p>
-                  <p className="text-sm font-bold text-surface-900 dark:text-surface-100">{guests.length}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 dark:bg-green-900/30">
-                  <UserCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <p className="text-xs text-surface-500">Checked In</p>
-                  <p className="text-sm font-bold text-surface-900 dark:text-surface-100">
-                    {checkedIn} <span className="text-xs font-normal text-surface-400">({rate}%)</span>
-                  </p>
-                </div>
-              </div>
+            <div>
+              <p className="text-sm font-medium text-surface-500 dark:text-surface-400">Total Guests</p>
+              <h3 className="text-2xl font-bold mt-0.5">{guests.length}</h3>
             </div>
           </div>
-
-          {/* Progress bar */}
-          {guests.length > 0 && (
-            <div className="mt-4">
-              <div className="h-2 rounded-full bg-surface-100 dark:bg-surface-800 overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary-500 to-emerald-500 transition-all duration-700"
-                  style={{ width: `${rate}%` }}
-                />
-              </div>
-            </div>
-          )}
         </Card>
+        <Card className="p-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-xl">
+              <UserCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-surface-500 dark:text-surface-400">Checked In</p>
+              <h3 className="text-2xl font-bold mt-0.5">
+                {guests.filter((g) => g.checked_in).length}
+                <span className="text-sm font-normal text-surface-400 ml-2">({checkInRate}%)</span>
+              </h3>
+            </div>
+          </div>
+        </Card>
+        <Card className="p-5">
+          <div className="flex flex-col justify-center h-full">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm font-medium text-surface-500">Status</span>
+              <Badge variant={statusVariant[event.status]}>{event.status.toUpperCase()}</Badge>
+            </div>
+            <p className="text-sm text-surface-600 dark:text-surface-300">
+              {formatDate(event.date)} at {formatTime(event.time)}
+            </p>
+          </div>
+        </Card>
+      </div>
 
-        {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row gap-3">
+      <div className="space-y-4">
+        {/* Actions Bar */}
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <SearchInput
             value={search}
             onChange={(v) => { setSearch(v); pagination.reset() }}
@@ -206,6 +198,9 @@ export default function EventDetailPage() {
                 {f === 'all' ? `All (${guests.length})` : f === 'checked' ? `✓ Checked (${guests.filter((g) => g.checked_in).length})` : `⏳ Pending (${guests.filter((g) => !g.checked_in).length})`}
               </button>
             ))}
+            <Button variant="outline" size="sm" icon={<Printer className="h-4 w-4" />} onClick={handleBulkPrint} disabled={paginated.length === 0}>
+              Bulk Print ({paginated.length})
+            </Button>
             <Button variant="outline" size="sm" icon={<Upload className="h-4 w-4" />} onClick={() => setImportOpen(true)}>
               Import
             </Button>
@@ -227,7 +222,7 @@ export default function EventDetailPage() {
           onCheckIn={(g) => checkInGuest(g.id, 'manual')}
           onUndoCheckIn={(g) => undoCheckIn(g.id)}
           onShowQR={setQrGuest}
-          onPrint={setPrintGuest}
+          onPrint={(g) => setPrintGuests([g])}
         />
 
         {/* Pagination */}
@@ -278,10 +273,10 @@ export default function EventDetailPage() {
 
       {/* Print Invitation Modal */}
       <InvitationPrintModal 
-        guest={printGuest} 
+        guests={printGuests || []} 
         event={event} 
-        open={!!printGuest} 
-        onClose={() => setPrintGuest(null)} 
+        open={!!printGuests && printGuests.length > 0} 
+        onClose={() => setPrintGuests(null)} 
       />
     </AppLayout>
   )

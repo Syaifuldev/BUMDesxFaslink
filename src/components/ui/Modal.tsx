@@ -53,7 +53,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       {/* Panel */}
       <div
         className={cn(
-          'relative w-full rounded-2xl shadow-2xl animate-fade-in',
+          'relative w-full rounded-2xl shadow-2xl animate-fade-in flex flex-col max-h-[90vh]',
           'bg-white dark:bg-surface-900',
           'border border-surface-200 dark:border-surface-700',
           sizes[size]
@@ -61,7 +61,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between p-5 border-b border-surface-100 dark:border-surface-800">
+          <div className="flex items-start justify-between p-5 border-b border-surface-100 dark:border-surface-800 shrink-0">
             <div>
               {title && (
                 <h2 className="text-lg font-semibold text-surface-900 dark:text-surface-100">
@@ -84,10 +84,10 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
           </div>
         )}
         {/* Body */}
-        <div className="p-5">{children}</div>
+        <div className="p-5 overflow-y-auto flex-1">{children}</div>
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-surface-100 dark:border-surface-800">
+          <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-surface-100 dark:border-surface-800 shrink-0">
             {footer}
           </div>
         )}
