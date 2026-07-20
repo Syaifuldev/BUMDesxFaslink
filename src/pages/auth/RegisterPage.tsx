@@ -22,8 +22,9 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await authService.signUp(data.email, data.password, data.full_name)
-      toast.success('Account created! Please check your email to confirm.')
+      const mappedEmail = `${data.username}@app.local`
+      await authService.signUp(mappedEmail, data.password, data.full_name)
+      toast.success('Account created! You can now sign in.')
       navigate('/login')
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Registration failed'
@@ -85,12 +86,12 @@ export default function RegisterPage() {
                 {...register('full_name')}
               />
               <Input
-                label="Email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                error={errors.email?.message}
-                {...register('email')}
+                label="Username"
+                type="text"
+                placeholder="superadmin"
+                autoComplete="username"
+                error={errors.username?.message}
+                {...register('username')}
               />
               <Input
                 label="Password"

@@ -21,13 +21,14 @@ interface SidebarProps {
   onClose: () => void
 }
 
-const navItems = [
-  { to: '/',          label: 'Dashboard',      icon: LayoutDashboard, end: true },
-  { to: '/events',    label: 'Events',          icon: CalendarDays },
-  { to: '/guests',    label: 'Guests',          icon: Users },
-  { to: '/scanner',   label: 'QR Scanner',      icon: ScanLine },
-  { to: '/history',   label: 'Check-in History', icon: History },
-  { to: '/analytics', label: 'Analytics',       icon: BarChart3 },
+const ALL_NAV_ITEMS = [
+  { to: '/',          label: 'Dashboard',      icon: LayoutDashboard, end: true, roles: ['superadmin'] },
+  { to: '/events',    label: 'Events',          icon: CalendarDays, roles: ['superadmin'] },
+  { to: '/guests',    label: 'Guests',          icon: Users, roles: ['superadmin'] },
+  { to: '/scanner',   label: 'QR Scanner',      icon: ScanLine, roles: ['superadmin', 'operator'] },
+  { to: '/history',   label: 'Check-in History', icon: History, roles: ['superadmin'] },
+  { to: '/analytics', label: 'Analytics',       icon: BarChart3, roles: ['superadmin'] },
+  { to: '/operators', label: 'Operators',       icon: Users, roles: ['superadmin'] },
 ]
 
 export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
@@ -43,6 +44,9 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
       toast.error('Failed to sign out')
     }
   }
+  
+  const userRole = profile?.role || 'superadmin'
+  const navItems = ALL_NAV_ITEMS.filter(item => item.roles.includes(userRole))
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
@@ -56,7 +60,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
             GuestSync
           </span>
           <p className="text-[10px] text-surface-400 dark:text-surface-500 leading-none mt-0.5">
-            Event Management
+            {userRole === 'superadmin' ? 'Event Management' : 'Operator Mode'}
           </p>
         </div>
       </div>

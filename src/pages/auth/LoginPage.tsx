@@ -22,7 +22,8 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await authService.signIn(data.email, data.password)
+      const mappedEmail = `${data.username}@app.local`
+      await authService.signIn(mappedEmail, data.password)
       toast.success('Welcome back!')
       navigate('/')
     } catch (err) {
@@ -88,12 +89,12 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Input
-                label="Email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                error={errors.email?.message}
-                {...register('email')}
+                label="Username"
+                type="text"
+                placeholder="superadmin"
+                autoComplete="username"
+                error={errors.username?.message}
+                {...register('username')}
               />
               <Input
                 label="Password"

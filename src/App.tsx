@@ -12,12 +12,18 @@ import GuestsPage from '@/pages/GuestsPage'
 import ScannerPage from '@/pages/ScannerPage'
 import CheckinHistoryPage from '@/pages/CheckinHistoryPage'
 import AnalyticsPage from '@/pages/AnalyticsPage'
+import OperatorsPage from '@/pages/OperatorsPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
-function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
+function PrivateRoute({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: ('superadmin' | 'operator')[] }) {
+  const { user, profile, loading } = useAuth()
   if (loading) return <PageSpinner />
   if (!user) return <Navigate to="/login" replace />
+  
+  if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
+    return <Navigate to={profile.role === 'operator' ? '/scanner' : '/'} replace />
+  }
+  
   return <>{children}</>
 }
 
@@ -35,14 +41,17 @@ function AppRoutes() {
       <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
-      {/* Protected */}
-      <Route path="/" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-      <Route path="/events" element={<PrivateRoute><EventsPage /></PrivateRoute>} />
-      <Route path="/events/:id" element={<PrivateRoute><EventDetailPage /></PrivateRoute>} />
-      <Route path="/guests" element={<PrivateRoute><GuestsPage /></PrivateRoute>} />
-      <Route path="/scanner" element={<PrivateRoute><ScannerPage /></PrivateRoute>} />
-      <Route path="/history" element={<PrivateRoute><CheckinHistoryPage /></PrivateRoute>} />
-      <Route path="/analytics" element={<PrivateRoute><AnalyticsPage /></PrivateRoute>} />
+      {/* Protected - Superadmin Only */}
+      <Route path="/" element={<PrivateRoute allowedRoles={['superadmin']}><DashboardPage /></PrivateRoute>} />
+      <Route path="/events" element={<PrivateRoute allowedRoles={['superadmin']}><EventsPage /></PrivateRoute>} />
+      <Route path="/events/:id" element={<PrivateRoute allowedRoles={['superadmin']}><EventDetailPage /></PrivateRoute>} />
+      <Route path="/guests" element={<PrivateRoute allowedRoles={['superadmin']}><GuestsPage /></PrivateRoute>} />
+      <Route path="/history" element={<PrivateRoute allowedRoles={['superadmin']}><CheckinHistoryPage /></PrivateRoute>} />
+      <Route path="/analytics" element={<PrivateRoute allowedRoles={['superadmin']}><AnalyticsPage /></PrivateRoute>} />
+      <Route path="/operators" element={<PrivateRoute allowedRoles={['superadmin']}><OperatorsPage /></PrivateRoute>} />
+      
+      {/* Protected - Superadmin & Operator */}
+      <Route path="/scanner" element={<PrivateRoute allowedRoles={['superadmin', 'operator']}><ScannerPage /></PrivateRoute>} />
 
       {/* 404 */}
       <Route path="*" element={<NotFoundPage />} />
