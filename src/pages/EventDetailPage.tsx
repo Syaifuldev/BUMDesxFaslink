@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  ArrowLeft, Plus, Upload, Download, UserCheck, Users,
+  ArrowLeft, Plus, Upload, Download, UserCheck, Users, Printer
 } from 'lucide-react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { GuestTable } from '@/components/guests/GuestTable'
