@@ -45,9 +45,11 @@ export default function EventDetailPage() {
   const [printGuests, setPrintGuests] = useState<Guest[] | null>(null)
   const [qrGuest, setQrGuest] = useState<Guest | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false)
+  const [resetLoading, setResetLoading] = useState(false)
   const [statusFilter, setStatusFilter] = useState<'all' | 'checked' | 'pending'>('all')
 
-  const { guests, loading, addGuest, updateGuest, removeGuest, checkInGuest, undoCheckIn, bulkImport, refetch } =
+  const { guests, loading, addGuest, updateGuest, removeGuest, checkInGuest, undoCheckIn, bulkImport, resetAllCheckIns, refetch } =
     useGuests(id!)
 
   // Realtime: reload guests on remote changes
@@ -98,6 +100,16 @@ export default function EventDetailPage() {
       setDeleteGuest(null)
     } finally {
       setDeleteLoading(false)
+    }
+  }
+
+  const handleResetCheckIns = async () => {
+    setResetLoading(true)
+    try {
+      await resetAllCheckIns()
+      setResetConfirmOpen(false)
+    } finally {
+      setResetLoading(false)
     }
   }
 
@@ -207,6 +219,9 @@ export default function EventDetailPage() {
             <Button variant="outline" size="sm" icon={<Download className="h-4 w-4" />} onClick={handleExport}>
               Export
             </Button>
+            <Button variant="danger" size="sm" onClick={() => setResetConfirmOpen(true)} disabled={guests.filter((g) => g.checked_in).length === 0}>
+              Reset Check-ins
+            </Button>
             <Button size="sm" icon={<Plus className="h-4 w-4" />} onClick={() => setAddOpen(true)}>
               Add Guest
             </Button>
@@ -243,7 +258,11 @@ export default function EventDetailPage() {
 
       {/* Edit Modal */}
       <Modal open={!!editGuest} onClose={() => setEditGuest(null)} title="Edit Guest" size="md">
-        <GuestForm guest={editGuest} onSubmit={handleEdit} onCancel={() => setEditGuest(null)} />
+        <GuestForm
+          initialData={editGuest!}
+          onSubmit={handleEdit}
+          onCancel={() => setEditGuest(null)}
+        />
       </Modal>
 
       {/* Delete Confirm */}
@@ -262,6 +281,25 @@ export default function EventDetailPage() {
       >
         <div className="rounded-xl bg-red-50 dark:bg-red-900/20 px-4 py-3">
           <p className="text-sm text-red-700 dark:text-red-400">This will remove the guest and their check-in record.</p>
+        </div>
+      </Modal>
+
+      {/* Reset Check-ins Confirm Modal */}
+      <Modal
+        open={resetConfirmOpen}
+        onClose={() => setResetConfirmOpen(false)}
+        title="Reset Data Check-in"
+        description="Apakah Anda yakin ingin mereset SEMUA data check-in untuk event ini?"
+        size="sm"
+        footer={
+          <>
+            <Button variant="outline" onClick={() => setResetConfirmOpen(false)} disabled={resetLoading}>Batal</Button>
+            <Button variant="danger" loading={resetLoading} onClick={handleResetCheckIns}>Reset Semua</Button>
+          </>
+        }
+      >
+        <div className="rounded-xl bg-red-50 dark:bg-red-900/20 px-4 py-3">
+          <p className="text-sm text-red-700 dark:text-red-400">Peringatan: Tindakan ini akan menghapus status kehadiran seluruh tamu di event ini dan tidak dapat dikembalikan.</p>
         </div>
       </Modal>
 

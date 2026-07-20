@@ -102,4 +102,13 @@ export const guestsService = {
     if (error) throw error
     return guest
   },
+
+  async resetCheckIns(eventId: string): Promise<void> {
+    const { error } = await supabase
+      .from('guests')
+      .update({ checked_in: false, checked_in_at: null })
+      .eq('event_id', eventId)
+      .eq('checked_in', true)
+    if (error) throw error
+  },
 }

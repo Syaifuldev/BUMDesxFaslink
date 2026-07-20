@@ -116,6 +116,19 @@ export function useGuests(eventId: string) {
     }
   }
 
+  const resetAllCheckIns = async () => {
+    const toastId = toast.loading('Resetting all check-ins...')
+    try {
+      await guestsService.resetCheckIns(eventId)
+      await fetchGuests()
+      toast.success('All check-ins have been reset!', { id: toastId })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to reset check-ins'
+      toast.error(msg, { id: toastId })
+      throw err
+    }
+  }
+
   return {
     guests,
     loading,
@@ -126,6 +139,7 @@ export function useGuests(eventId: string) {
     checkInGuest,
     undoCheckIn,
     bulkImport,
+    resetAllCheckIns,
     refetch: fetchGuests,
   }
 }
