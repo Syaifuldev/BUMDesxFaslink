@@ -1,6 +1,6 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { eventSchema } from '@/lib/validations'
+import { eventSchemaLegacy } from '@/lib/validations'
 import type { Event, EventFormData } from '@/types'
 import { Input, Textarea } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
@@ -38,7 +38,7 @@ export function EventForm({ event, onSubmit, onCancel, loading }: EventFormProps
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useForm<EventFieldValues, any, EventFieldValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(eventSchema) as any,
+    resolver: zodResolver(eventSchemaLegacy) as any,
     defaultValues: {
       name: event?.name ?? '',
       description: event?.description ?? '',
