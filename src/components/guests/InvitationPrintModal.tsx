@@ -109,7 +109,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
 
       {/* ── PRINT ONLY VIEW ──────────────────────────────────────── */}
       {open && (
-        <div className="hidden print:block fixed inset-0 bg-white z-[9999] text-black w-full h-full m-0 p-0 overflow-visible">
+        <div className="hidden print:block absolute top-0 left-0 w-full bg-white z-[9999] text-black m-0 p-0 overflow-visible">
           <style>
             {`
               @media print {
