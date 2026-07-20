@@ -20,29 +20,36 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
     window.print()
   }
 
-  // Format Hari, Tanggal
-  const dateObj = new Date(event.date)
-  const hari = dateObj.toLocaleDateString('id-ID', { weekday: 'long' })
-  const tanggal = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+  // Format Hari, Tanggal with safety fallback
+  let hari = '-'
+  let tanggal = '-'
+  try {
+    const dateObj = new Date(event.date)
+    hari = dateObj.toLocaleDateString('id-ID', { weekday: 'long' })
+    tanggal = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+  } catch (e) {
+    // ignore
+  }
+
+  const qrValue = guest.qr_code || guest.id || 'no-qr'
 
   return (
     <>
       {/* ── MODAL FOR PREVIEW ──────────────────────────────────────── */}
-      <div className="print:hidden">
-        <Modal
-          open={open}
-          onClose={onClose}
-          title="Cetak Kartu Undangan"
-          size="lg"
-          footer={
-            <>
-              <Button variant="outline" onClick={onClose}>Batal</Button>
-              <Button onClick={handlePrint} icon={<Printer className="h-4 w-4" />}>
-                Cetak ke PDF
-              </Button>
-            </>
-          }
-        >
+      <Modal
+        open={open}
+        onClose={onClose}
+        title="Cetak Kartu Undangan"
+        size="lg"
+        footer={
+          <>
+            <Button variant="outline" onClick={onClose}>Batal</Button>
+            <Button onClick={handlePrint} icon={<Printer className="h-4 w-4" />}>
+              Cetak ke PDF
+            </Button>
+          </>
+        }
+      >
           <div className="p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-x-auto flex justify-center w-full">
             {/* Preview Card */}
             <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full min-w-[600px] max-w-3xl border relative">
@@ -71,7 +78,7 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
                 </div>
 
                 <div className="shrink-0 flex flex-col items-center p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-xl">
-                  <QRCodeSVG value={guest.qr_code} size={120} level="H" includeMargin />
+                  <QRCodeSVG value={qrValue} size={120} level="H" includeMargin />
                   <p className="text-[10px] sm:text-xs text-center mt-2 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
                 </div>
               </div>
@@ -85,7 +92,6 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
             </div>
           </div>
         </Modal>
-      </div>
 
       {/* ── PRINT ONLY VIEW ──────────────────────────────────────── */}
       {open && (
@@ -126,7 +132,7 @@ export function InvitationPrintModal({ guest, event, open, onClose }: Invitation
                 </div>
 
                 <div className="shrink-0 flex flex-col items-center p-4 border-4 border-black rounded-2xl bg-white">
-                  <QRCodeSVG value={guest.qr_code} size={180} level="H" includeMargin />
+                  <QRCodeSVG value={qrValue} size={180} level="H" includeMargin />
                   <p className="text-xs text-center mt-3 font-bold tracking-widest text-black">SCAN UNTUK MASUK</p>
                 </div>
               </div>
