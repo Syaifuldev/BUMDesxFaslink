@@ -89,7 +89,18 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                 </div>
 
                 <div className="shrink-0 flex flex-col items-center p-2 sm:p-3 border-2 border-dashed border-gray-300 rounded-xl">
-                  <QRCodeSVG value={previewQrValue} size={90} level="H" includeMargin />
+                  <QRCodeSVG 
+                    value={previewQrValue} 
+                    size={90} 
+                    level="H" 
+                    includeMargin 
+                    imageSettings={{
+                      src: "/bumdes_logo.png",
+                      height: 24,
+                      width: 24,
+                      excavate: true,
+                    }}
+                  />
                   <p className="text-[9px] sm:text-[10px] text-center mt-1 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
                 </div>
               </div>
@@ -164,7 +175,18 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                     </div>
 
                     <div className="shrink-0 flex flex-col items-center p-3 rounded-xl bg-white">
-                      <QRCodeSVG value={q} size={130} level="H" includeMargin />
+                      <QRCodeSVG 
+                        value={q} 
+                        size={130} 
+                        level="H" 
+                        includeMargin 
+                        imageSettings={{
+                          src: "/bumdes_logo.png",
+                          height: 35,
+                          width: 35,
+                          excavate: true,
+                        }}
+                      />
                       <p className="text-[10px] text-center mt-2 font-bold tracking-widest text-black">SCAN MASUK</p>
                     </div>
                   </div>
