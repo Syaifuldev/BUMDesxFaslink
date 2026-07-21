@@ -39,10 +39,10 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       <div className="bg-white text-black p-4 sm:p-6 w-full relative">
         <div className="text-center mb-4 border-b-2 border-black pb-3">
           {/* Logos */}
-          <div className="absolute top-4 left-8 sm:top-5 sm:left-10 flex items-center justify-start h-10 w-20 sm:h-12 sm:w-24">
+          <div className="absolute top-4 left-8 sm:top-5 sm:left-10 flex items-center justify-start h-16 w-32 sm:h-20 sm:w-40">
             <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
           </div>
-          <div className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center justify-end h-10 w-20 sm:h-12 sm:w-24">
+          <div className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center justify-end h-16 w-32 sm:h-20 sm:w-40">
             <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
           </div>
 
@@ -88,8 +88,11 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
         </div>
 
         <div className="mt-6 sm:mt-8 flex justify-end">
-          <div className="text-center">
-            <p className="text-xs sm:text-sm text-gray-800 mb-8 sm:mb-10">Direktur BUMDes Padas Jaya,</p>
+          <div className="text-center flex flex-col items-center">
+            <p className="text-xs sm:text-sm text-gray-800">Direktur BUMDes Padas Jaya,</p>
+            <div className="h-16 sm:h-24 flex items-center justify-center my-1">
+              <img src="/ttd_direktur.png" alt="Tanda Tangan" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+            </div>
             <p className="font-bold text-sm sm:text-base underline">Ferry Tri Sukarno</p>
           </div>
         </div>
