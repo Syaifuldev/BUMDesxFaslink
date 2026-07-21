@@ -7,7 +7,7 @@ function mapGuestsToLogs(guests: any[]): CheckinLog[] {
     guest_id: g.id,
     event_id: g.event_id,
     checked_in_at: g.checked_in_at || new Date().toISOString(),
-    method: 'qr', // Default to qr for legacy compatibility
+    method: (g.checkin_method as 'qr' | 'manual') || 'qr',
     checked_in_by: null,
     notes: g.notes || null,
     guest: g,

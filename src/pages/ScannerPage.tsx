@@ -392,7 +392,7 @@ export default function ScannerPage() {
 
       const { error: checkinErr } = await supabase
         .from('guests')
-        .update({ checked_in: true, checked_in_at: now })
+        .update({ checked_in: true, checked_in_at: now, checkin_method: 'qr' })
         .eq('id', guest.id)
 
       if (checkinErr) throw new Error(checkinErr.message)

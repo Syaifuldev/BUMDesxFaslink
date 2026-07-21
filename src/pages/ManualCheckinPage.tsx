@@ -80,7 +80,7 @@ export default function ManualCheckinPage() {
       const now = new Date().toISOString()
       const { error } = await supabase
         .from('guests')
-        .update({ checked_in: true, checked_in_at: now })
+        .update({ checked_in: true, checked_in_at: now, checkin_method: 'manual' })
         .eq('id', guest.id)
       if (error) throw error
       toast.success(`✅ ${guest.name} berhasil check-in!`)
