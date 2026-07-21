@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronRight,
   X,
+  ClipboardCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/context/AuthContext'
@@ -22,13 +23,14 @@ interface SidebarProps {
 }
 
 const ALL_NAV_ITEMS = [
-  { to: '/',          label: 'Dashboard',      icon: LayoutDashboard, end: true, roles: ['superadmin'] },
-  { to: '/events',    label: 'Events',          icon: CalendarDays, roles: ['superadmin'] },
-  { to: '/guests',    label: 'Guests',          icon: Users, roles: ['superadmin'] },
-  { to: '/scanner',   label: 'QR Scanner',      icon: ScanLine, roles: ['superadmin', 'operator'] },
-  { to: '/history',   label: 'Check-in History', icon: History, roles: ['superadmin'] },
-  { to: '/analytics', label: 'Analytics',       icon: BarChart3, roles: ['superadmin'] },
-  { to: '/operators', label: 'Operators',       icon: Users, roles: ['superadmin'] },
+  { to: '/',          label: 'Dashboard',        icon: LayoutDashboard, end: true, roles: ['superadmin'] },
+  { to: '/events',    label: 'Events',            icon: CalendarDays, roles: ['superadmin'] },
+  { to: '/guests',    label: 'Guests',            icon: Users, roles: ['superadmin'] },
+  { to: '/scanner',   label: 'QR Scanner',        icon: ScanLine, roles: ['superadmin', 'operator'] },
+  { to: '/manual-checkin', label: 'Check-in Manual', icon: ClipboardCheck, roles: ['superadmin', 'operator'] },
+  { to: '/history',   label: 'Check-in History',  icon: History, roles: ['superadmin', 'operator'] },
+  { to: '/analytics', label: 'Analytics',         icon: BarChart3, roles: ['superadmin'] },
+  { to: '/operators', label: 'Operators',         icon: Users, roles: ['superadmin'] },
 ]
 
 export function Sidebar({ mobileOpen, onClose }: SidebarProps) {

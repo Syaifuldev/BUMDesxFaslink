@@ -10,6 +10,7 @@ import EventsPage from '@/pages/EventsPage'
 import EventDetailPage from '@/pages/EventDetailPage'
 import GuestsPage from '@/pages/GuestsPage'
 import ScannerPage from '@/pages/ScannerPage'
+import ManualCheckinPage from '@/pages/ManualCheckinPage'
 import CheckinHistoryPage from '@/pages/CheckinHistoryPage'
 import AnalyticsPage from '@/pages/AnalyticsPage'
 import OperatorsPage from '@/pages/OperatorsPage'
@@ -46,12 +47,13 @@ function AppRoutes() {
       <Route path="/events" element={<PrivateRoute allowedRoles={['superadmin']}><EventsPage /></PrivateRoute>} />
       <Route path="/events/:id" element={<PrivateRoute allowedRoles={['superadmin']}><EventDetailPage /></PrivateRoute>} />
       <Route path="/guests" element={<PrivateRoute allowedRoles={['superadmin']}><GuestsPage /></PrivateRoute>} />
-      <Route path="/history" element={<PrivateRoute allowedRoles={['superadmin']}><CheckinHistoryPage /></PrivateRoute>} />
       <Route path="/analytics" element={<PrivateRoute allowedRoles={['superadmin']}><AnalyticsPage /></PrivateRoute>} />
       <Route path="/operators" element={<PrivateRoute allowedRoles={['superadmin']}><OperatorsPage /></PrivateRoute>} />
       
       {/* Protected - Superadmin & Operator */}
       <Route path="/scanner" element={<PrivateRoute allowedRoles={['superadmin', 'operator']}><ScannerPage /></PrivateRoute>} />
+      <Route path="/manual-checkin" element={<PrivateRoute allowedRoles={['superadmin', 'operator']}><ManualCheckinPage /></PrivateRoute>} />
+      <Route path="/history" element={<PrivateRoute allowedRoles={['superadmin', 'operator']}><CheckinHistoryPage /></PrivateRoute>} />
 
       {/* 404 */}
       <Route path="*" element={<NotFoundPage />} />
