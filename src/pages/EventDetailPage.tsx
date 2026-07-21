@@ -65,7 +65,7 @@ export default function EventDetailPage() {
   }, [id])
 
   const filtered = useMemo(() => {
-    return guests
+    const result = guests
       .filter((g) => {
         if (statusFilter === 'checked') return g.checked_in
         if (statusFilter === 'pending') return !g.checked_in
@@ -76,6 +76,15 @@ export default function EventDetailPage() {
           .filter(Boolean)
           .some((f) => f!.toLowerCase().includes(search.toLowerCase()))
       )
+      
+    return result.sort((a, b) => {
+      const compA = (a.company || '').toLowerCase()
+      const compB = (b.company || '').toLowerCase()
+      if (compA !== compB) return compA.localeCompare(compB)
+      const nameA = (a.name || '').toLowerCase()
+      const nameB = (b.name || '').toLowerCase()
+      return nameA.localeCompare(nameB)
+    }).map((g, idx) => ({ ...g, _globalIndex: idx + 1 }))
   }, [guests, search, statusFilter])
 
   const pagination = usePagination(filtered.length, 25)

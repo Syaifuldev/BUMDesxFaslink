@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 interface GuestTableProps {
   guests: Guest[]
   loading: boolean
+  startIndex?: number
   onEdit: (guest: Guest) => void
   onDelete: (guest: Guest) => void
   onCheckIn: (guest: Guest) => void
@@ -21,13 +22,13 @@ interface GuestTableProps {
   onPrint?: (guest: Guest) => void
 }
 
-type SortField = 'name' | 'company' | 'checked_in' | 'created_at'
+type SortField = 'name' | 'company' | 'checked_in' | 'created_at' | 'none'
 type SortDir = 'asc' | 'desc'
 
 export function GuestTable({
-  guests, loading, onEdit, onDelete, onCheckIn, onUndoCheckIn, onShowQR, onPrint
+  guests, loading, startIndex = 0, onEdit, onDelete, onCheckIn, onUndoCheckIn, onShowQR, onPrint
 }: GuestTableProps) {
-  const [sort, setSort] = useState<{ field: SortField; dir: SortDir }>({ field: 'created_at', dir: 'asc' })
+  const [sort, setSort] = useState<{ field: SortField; dir: SortDir }>({ field: 'none', dir: 'asc' })
 
   const handleSort = (field: SortField) => {
     setSort((prev) =>
@@ -37,7 +38,7 @@ export function GuestTable({
     )
   }
 
-  const sorted = [...guests].sort((a, b) => {
+  const sorted = sort.field === 'none' ? guests : [...guests].sort((a, b) => {
     const mul = sort.dir === 'asc' ? 1 : -1
     const valA = a[sort.field as keyof Guest] ?? ''
     const valB = b[sort.field as keyof Guest] ?? ''
@@ -79,6 +80,9 @@ export function GuestTable({
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-surface-200 dark:border-surface-800 bg-surface-50 dark:bg-surface-800/50">
+            <th className="px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider w-16">
+              No.
+            </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wider">
               <ThButton field="name">Guest</ThButton>
             </th>
@@ -97,7 +101,7 @@ export function GuestTable({
           </tr>
         </thead>
         <tbody className="divide-y divide-surface-100 dark:divide-surface-800">
-          {sorted.map((guest) => (
+          {sorted.map((guest, idx) => (
             <tr
               key={guest.id}
               className={cn(
@@ -105,6 +109,9 @@ export function GuestTable({
                 guest.checked_in && 'bg-green-50/40 dark:bg-green-900/5'
               )}
             >
+              <td className="px-4 py-3 text-surface-500 font-mono text-xs">
+                {(guest as any)._globalIndex ?? idx + 1}
+              </td>
               <td className="px-4 py-3">
                 <div className="flex flex-col">
                   <span className="font-medium text-surface-900 dark:text-surface-100">{guest.name}</span>

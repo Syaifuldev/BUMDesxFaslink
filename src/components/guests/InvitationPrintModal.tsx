@@ -38,6 +38,11 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
     const q = guest.qr_code || guest.id || 'no-qr'
     return (
       <div className="bg-white text-black p-4 sm:p-6 w-full h-[155mm] flex flex-col justify-between relative">
+        {(guest as any)._globalIndex && (
+          <div className="absolute bottom-3 right-4 sm:bottom-4 sm:right-6 text-[10px] sm:text-xs font-mono font-bold text-gray-400">
+            No. {(guest as any)._globalIndex.toString().padStart(3, '0')}
+          </div>
+        )}
         <div className="text-center mb-4 border-b-2 border-black pb-3">
           <div className="absolute top-2 left-4 sm:top-4 sm:left-6 flex items-center justify-start h-16 w-32 sm:h-20 sm:w-40">
             <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
