@@ -46,31 +46,32 @@ export default function ManualCheckinPage() {
     setStats({ total: total ?? 0, checkedIn: checkedIn ?? 0, pending: (total ?? 0) - (checkedIn ?? 0) })
   }, [])
 
-  useEffect(() => { if (selectedEventId) fetchStats(selectedEventId) }, [selectedEventId, fetchStats])
-
-  // Search guests
-  const handleSearch = useCallback(async () => {
-    if (!selectedEventId) { toast.error('Pilih acara terlebih dahulu'); return }
+  // Load all guests when event changes
+  const loadAllGuests = useCallback(async () => {
+    if (!selectedEventId) return
     setLoading(true)
     try {
-      let query = supabase.from('guests').select('*').eq('event_id', selectedEventId).order('name')
-      if (search.trim()) {
-        query = query.ilike('name', `%${search.trim()}%`)
-      }
-      const { data, error } = await query.limit(50)
+      const { data, error } = await supabase
+        .from('guests')
+        .select('*')
+        .eq('event_id', selectedEventId)
+        .order('name')
+        .limit(5000)
       if (error) throw error
       setGuests(data ?? [])
     } catch (err) {
-      toast.error('Gagal mencari tamu')
+      toast.error('Gagal memuat data tamu')
     } finally {
       setLoading(false)
     }
-  }, [selectedEventId, search])
-
-  // Load all guests when event changes
-  useEffect(() => {
-    if (selectedEventId) handleSearch()
   }, [selectedEventId])
+
+  useEffect(() => {
+    if (selectedEventId) {
+      loadAllGuests()
+      fetchStats(selectedEventId)
+    }
+  }, [selectedEventId, loadAllGuests, fetchStats])
 
   // Manual check-in
   const handleCheckIn = async (guest: Guest) => {
@@ -176,7 +177,6 @@ export default function ManualCheckinPage() {
                 placeholder="Cari nama tamu..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 className={cn(
                   'w-full pl-9 pr-3 py-2.5 rounded-xl border text-sm',
                   'bg-surface-50 dark:bg-surface-800',
@@ -188,9 +188,6 @@ export default function ManualCheckinPage() {
                 )}
               />
             </div>
-            <Button onClick={handleSearch} loading={loading} icon={<Search className="h-4 w-4" />}>
-              Cari
-            </Button>
           </div>
         </Card>
 
