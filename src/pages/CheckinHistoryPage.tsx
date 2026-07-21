@@ -191,13 +191,13 @@ export default function CheckinHistoryPage() {
                         </td>
                         <td className="px-4 py-3">
                           {log.method === 'qr' ? (
-                            <Badge variant="purple">
-                              <ScanLine className="h-3 w-3 mr-1" /> QR Scan
-                            </Badge>
+                            <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-700">
+                              <ScanLine className="h-3 w-3" /> QR Scan
+                            </span>
                           ) : (
-                            <Badge variant="default">
-                              <Hand className="h-3 w-3 mr-1" /> Manual
-                            </Badge>
+                            <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300 border border-orange-200 dark:border-orange-700">
+                              <Hand className="h-3 w-3" /> Manual
+                            </span>
                           )}
                         </td>
                       </tr>

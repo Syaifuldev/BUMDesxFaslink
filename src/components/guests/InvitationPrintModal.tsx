@@ -148,24 +148,28 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             {`
               @media print {
                 @page { margin: 0; size: portrait; }
-                body { margin: 0; padding: 0; }
+                body > * { display: none !important; }
+                body { margin: 0; padding: 0; background: white; }
+                .invitation-print-root { display: block !important; }
                 .print-page-break { page-break-after: always; }
                 .print-page-break:last-child { page-break-after: auto; }
               }
             `}
           </style>
           
-          {guests.map((g, idx) => {
-            const q = g.qr_code || g.id || 'no-qr'
-            return (
-              <div key={g.id || idx} className="w-full flex items-start justify-center pt-0 print-page-break">
-                {/* 200mm width to fit nicely within F4 (210/215mm) with minimal margins */}
-                <div className="w-[200mm] max-w-full">
-                  {renderCard(g)}
+          <div className="invitation-print-root">
+            {guests.map((g, idx) => {
+              const q = g.qr_code || g.id || 'no-qr'
+              return (
+                <div key={g.id || idx} className="w-full flex items-start justify-center pt-0 print-page-break">
+                  {/* 200mm width to fit nicely within F4 (210/215mm) with minimal margins */}
+                  <div className="w-[200mm] max-w-full">
+                    {renderCard(g)}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       )}
     </>
