@@ -32,7 +32,70 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
   }
 
   const previewGuest = guests[0]
-  const previewQrValue = previewGuest.qr_code || previewGuest.id || 'no-qr'
+
+  const renderCard = (guest: Guest) => {
+    const q = guest.qr_code || guest.id || 'no-qr'
+    return (
+      <div className="bg-white text-black p-4 sm:p-6 w-full relative">
+        <div className="text-center mb-4 border-b-2 border-black pb-3">
+          {/* Logos */}
+          <div className="absolute top-4 left-8 sm:top-5 sm:left-10 flex items-center justify-start h-10 w-20 sm:h-12 sm:w-24">
+            <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+          </div>
+          <div className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center justify-end h-10 w-20 sm:h-12 sm:w-24">
+            <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+          </div>
+
+          <h1 className="text-lg sm:text-xl font-black uppercase tracking-wider mt-4 sm:mt-2">KARTU UNDANGAN</h1>
+          <h2 className="text-base sm:text-lg font-bold mt-1 text-gray-800">{event.name}</h2>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start justify-between text-center sm:text-left">
+          <div className="flex-1 space-y-3 text-sm sm:text-base w-full">
+            <div>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
+              <p className="font-bold text-lg sm:text-xl">{guest.name}</p>
+            </div>
+            
+            <div>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat / Instansi</p>
+              <p className="font-medium text-gray-800">{guest.company || '-'}</p>
+            </div>
+            
+            <div>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Waktu & Tempat</p>
+              <p className="font-medium text-gray-800">{hari}, {tanggal}</p>
+              <p className="font-medium text-gray-800">Pukul 06.30 s.d. Selesai</p>
+              {event.location && <p className="font-medium text-gray-800 mt-1">{event.location}</p>}
+            </div>
+          </div>
+
+          <div className="shrink-0 flex flex-col items-center p-2 sm:p-3 border-2 border-dashed border-gray-300 rounded-xl">
+            <QRCodeSVG 
+              value={q} 
+              size={100} 
+              level="H" 
+              includeMargin 
+              imageSettings={{
+                src: "/bumdes_logo.png",
+                height: 26,
+                width: 26,
+                excavate: true,
+              }}
+            />
+            <p className="text-[9px] sm:text-[10px] text-center mt-1 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
+          </div>
+        </div>
+
+        <div className="mt-6 sm:mt-8 flex justify-end">
+          <div className="text-center">
+            <p className="text-xs sm:text-sm text-gray-800 mb-8 sm:mb-10">Direktur BUMDes Padas Jaya,</p>
+            <p className="font-bold text-sm sm:text-base underline">Ferry Tri Sukarno</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -54,63 +117,8 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       >
           <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="bg-white text-black p-4 sm:p-6 shadow-sm w-full max-w-3xl relative">
-              <div className="text-center mb-4 border-b-2 border-black pb-3">
-                {/* Logos */}
-                <div className="absolute top-4 left-4 sm:top-5 sm:left-6 flex items-center justify-start h-10 w-20 sm:h-12 sm:w-24">
-                  <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
-                </div>
-                <div className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center justify-end h-10 w-20 sm:h-12 sm:w-24">
-                  <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
-                </div>
-
-                <h1 className="text-lg sm:text-xl font-black uppercase tracking-wider mt-4 sm:mt-2">KARTU UNDANGAN</h1>
-                <h2 className="text-base sm:text-lg font-bold mt-1 text-gray-800">{event.name}</h2>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start justify-between text-center sm:text-left">
-                <div className="flex-1 space-y-3 text-sm sm:text-base w-full">
-                  <div>
-                    <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
-                    <p className="font-bold text-lg sm:text-xl">{previewGuest.name}</p>
-                  </div>
-                  
-                  <div>
-                    <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat / Instansi</p>
-                    <p className="font-medium text-gray-800">{previewGuest.company || '-'}</p>
-                  </div>
-                  
-                  <div>
-                    <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Waktu & Tempat</p>
-                    <p className="font-medium text-gray-800">{hari}, {tanggal}</p>
-                    <p className="font-medium text-gray-800">Pukul 06.30 s.d. Selesai</p>
-                    {event.location && <p className="font-medium text-gray-800 mt-1">{event.location}</p>}
-                  </div>
-                </div>
-
-                <div className="shrink-0 flex flex-col items-center p-2 sm:p-3 border-2 border-dashed border-gray-300 rounded-xl">
-                  <QRCodeSVG 
-                    value={previewQrValue} 
-                    size={90} 
-                    level="H" 
-                    includeMargin 
-                    imageSettings={{
-                      src: "/bumdes_logo.png",
-                      height: 24,
-                      width: 24,
-                      excavate: true,
-                    }}
-                  />
-                  <p className="text-[9px] sm:text-[10px] text-center mt-1 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
-                </div>
-              </div>
-
-              <div className="mt-6 sm:mt-8 flex justify-end">
-                <div className="text-center">
-                  <p className="text-xs sm:text-sm text-gray-800 mb-8 sm:mb-10">Direktur BUMDes Padas Jaya,</p>
-                  <p className="font-bold text-sm sm:text-base underline">Ferry Tri Sukarno</p>
-                </div>
-              </div>
+            <div className="w-full max-w-3xl shadow-sm border border-gray-200">
+              {renderCard(previewGuest)}
             </div>
           </div>
           {guests.length > 1 && (
@@ -140,63 +148,8 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             return (
               <div key={g.id || idx} className="w-full flex items-start justify-center pt-8 print-page-break">
                 {/* Strictly 180mm width guarantees it fits within A4 portrait (210mm) */}
-                <div className="w-[180mm] max-w-full p-6 relative">
-                  <div className="text-center mb-6 border-b-4 border-black pb-4">
-                    {/* Logos */}
-                    <div className="absolute top-4 left-4 flex items-center justify-start h-14 w-28">
-                      <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
-                    </div>
-                    <div className="absolute top-4 right-4 flex items-center justify-end h-14 w-28">
-                      <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
-                    </div>
-
-                    <h1 className="text-2xl font-black uppercase tracking-widest mt-6">KARTU UNDANGAN</h1>
-                    <h2 className="text-lg font-bold mt-1 text-gray-800 uppercase">{event.name}</h2>
-                  </div>
-                  
-                  <div className="flex gap-6 items-start justify-between">
-                    <div className="flex-1 space-y-5 text-base">
-                      <div>
-                        <p className="text-xs text-gray-600 font-bold uppercase tracking-wider mb-1">Nama Tamu</p>
-                        <p className="font-black text-xl">{g.name}</p>
-                      </div>
-                      
-                      <div>
-                        <p className="text-xs text-gray-600 font-bold uppercase tracking-wider mb-1">Alamat / Instansi</p>
-                        <p className="font-bold text-lg text-gray-800">{g.company || '-'}</p>
-                      </div>
-                      
-                      <div>
-                        <p className="text-xs text-gray-600 font-bold uppercase tracking-wider mb-1">Waktu & Tempat</p>
-                        <p className="font-bold text-lg text-gray-800">{hari}, {tanggal}</p>
-                        <p className="font-bold text-lg text-gray-800">Pukul 06.30 s.d. Selesai</p>
-                        <p className="font-bold text-base text-gray-700 mt-1">{event.location || '-'}</p>
-                      </div>
-                    </div>
-
-                    <div className="shrink-0 flex flex-col items-center p-3 rounded-xl bg-white">
-                      <QRCodeSVG 
-                        value={q} 
-                        size={130} 
-                        level="H" 
-                        includeMargin 
-                        imageSettings={{
-                          src: "/bumdes_logo.png",
-                          height: 35,
-                          width: 35,
-                          excavate: true,
-                        }}
-                      />
-                      <p className="text-[10px] text-center mt-2 font-bold tracking-widest text-black">SCAN MASUK</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-12 flex justify-end pr-4">
-                    <div className="text-center">
-                      <p className="text-sm text-gray-800 font-medium mb-16">Direktur BUMDes Padas Jaya,</p>
-                      <p className="font-black text-lg underline">Ferry Tri Sukarno</p>
-                    </div>
-                  </div>
+                <div className="w-[180mm] max-w-full">
+                  {renderCard(g)}
                 </div>
               </div>
             )
