@@ -123,7 +123,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       >
           <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="w-full max-w-3xl shadow-sm border border-gray-200">
+            <div className="w-[180mm] max-w-full shadow-sm border border-gray-200 bg-white mx-auto">
               {renderCard(previewGuest)}
             </div>
           </div>
