@@ -122,7 +122,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       >
           <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="w-[180mm] max-w-full shadow-sm border border-gray-200 bg-white mx-auto">
+            <div className="w-[195mm] max-w-full shadow-sm border border-gray-200 bg-white mx-auto">
               {renderCard(previewGuest)}
             </div>
           </div>
@@ -140,7 +140,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           <style>
             {`
               @media print {
-                @page { margin: 10mm; size: portrait; }
+                @page { margin: 5mm; size: portrait; }
                 body { margin: 0; padding: 0; }
                 .print-page-break { page-break-after: always; }
                 .print-page-break:last-child { page-break-after: auto; }
@@ -151,9 +151,9 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           {guests.map((g, idx) => {
             const q = g.qr_code || g.id || 'no-qr'
             return (
-              <div key={g.id || idx} className="w-full flex items-start justify-center pt-8 print-page-break">
-                {/* Strictly 180mm width guarantees it fits within A4 portrait (210mm) */}
-                <div className="w-[180mm] max-w-full">
+              <div key={g.id || idx} className="w-full flex items-start justify-center pt-2 print-page-break">
+                {/* 195mm width to fit nicely within F4 (210/215mm) with small margins */}
+                <div className="w-[195mm] max-w-full">
                   {renderCard(g)}
                 </div>
               </div>
