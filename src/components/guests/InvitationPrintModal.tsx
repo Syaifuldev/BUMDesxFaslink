@@ -38,11 +38,10 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
     return (
       <div className="bg-white text-black p-4 sm:p-6 w-full relative">
         <div className="text-center mb-4 border-b-2 border-black pb-3">
-          {/* Logos */}
-          <div className="absolute top-4 left-8 sm:top-5 sm:left-10 flex items-center justify-start h-16 w-32 sm:h-20 sm:w-40">
+          <div className="absolute top-2 left-4 sm:top-4 sm:left-6 flex items-center justify-start h-16 w-32 sm:h-20 sm:w-40">
             <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
           </div>
-          <div className="absolute top-4 right-0 sm:top-5 sm:right-2 flex items-center justify-end h-16 w-32 sm:h-20 sm:w-40">
+          <div className="absolute top-2 right-4 sm:top-4 sm:right-6 flex items-center justify-end h-16 w-32 sm:h-20 sm:w-40">
             <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
           </div>
 
@@ -58,7 +57,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             </div>
             
             <div>
-              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat / Instansi</p>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat</p>
               <p className="font-medium text-gray-800">{guest.company || '-'}</p>
             </div>
             
@@ -83,7 +82,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                 excavate: true,
               }}
             />
-            <p className="text-[9px] sm:text-[10px] text-center mt-1 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
+            <p className="text-[9px] sm:text-[10px] text-center mt-1 text-gray-500 font-mono">Scan Saat Registrasi Oleh Panitia</p>
           </div>
         </div>
 
@@ -93,7 +92,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           </div>
           <div className="text-center flex flex-col items-center">
             <p className="text-xs sm:text-sm text-gray-800 relative z-10">Direktur BUMDes Padas Jaya,</p>
-            <div className="h-16 sm:h-20 flex items-center justify-center -my-2 sm:-my-4 relative">
+            <div className="h-16 sm:h-20 flex items-center justify-center my-0 relative">
               <img src="/ttd_direktur.png" alt="Tanda Tangan" className="max-h-full max-w-full object-contain mix-blend-multiply" onError={(e) => e.currentTarget.style.display = 'none'} />
             </div>
             <p className="font-bold text-sm sm:text-base underline relative z-10">Ferry Tri Sukarno</p>
