@@ -58,6 +58,12 @@ export function QRCodeDisplay({ guest, open, onClose }: QRCodeDisplayProps) {
             size={200}
             level="H"
             includeMargin={false}
+            imageSettings={{
+              src: "/bumdes_logo.png",
+              height: 48,
+              width: 48,
+              excavate: true,
+            }}
           />
         </div>
 
