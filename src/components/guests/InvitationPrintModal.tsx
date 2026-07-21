@@ -93,7 +93,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           </div>
           <div className="text-center flex flex-col items-center">
             <p className="text-xs sm:text-sm text-gray-800">Direktur BUMDes Padas Jaya,</p>
-            <div className="h-16 sm:h-24 flex items-center justify-center my-1">
+            <div className="h-24 sm:h-32 flex items-center justify-center my-1">
               <img src="/ttd_direktur.png" alt="Tanda Tangan" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
             </div>
             <p className="font-bold text-sm sm:text-base underline">Ferry Tri Sukarno</p>
