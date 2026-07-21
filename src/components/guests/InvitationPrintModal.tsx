@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { Printer } from 'lucide-react'
@@ -142,22 +143,19 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       </div>
 
       {/* ── PRINT ONLY VIEW ──────────────────────────────────────── */}
-      {open && (
-        <div className="hidden print:block absolute top-0 left-0 w-full bg-white z-[9999] text-black m-0 p-0 overflow-visible">
+      {open && typeof document !== 'undefined' && createPortal(
+        <div className="hidden print:block w-full bg-white text-black m-0 p-0">
           <style>
             {`
               @media print {
                 @page { margin: 0; size: portrait; }
-                body * { visibility: hidden !important; }
-                .invitation-print-root,
-                .invitation-print-root * { visibility: visible !important; }
-                .invitation-print-root {
-                  position: fixed !important;
-                  top: 0 !important;
-                  left: 0 !important;
-                  width: 100% !important;
-                  background: white !important;
-                  z-index: 99999 !important;
+                #root { display: none !important; }
+                html, body { 
+                  margin: 0 !important; 
+                  padding: 0 !important; 
+                  background: white !important; 
+                  height: auto !important; 
+                  overflow: visible !important; 
                 }
                 .print-page-break { page-break-after: always; }
                 .print-page-break:last-child { page-break-after: auto; }
@@ -178,7 +176,8 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
               )
             })}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
