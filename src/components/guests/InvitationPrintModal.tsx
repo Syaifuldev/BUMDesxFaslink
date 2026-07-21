@@ -148,9 +148,17 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             {`
               @media print {
                 @page { margin: 0; size: portrait; }
-                body > * { display: none !important; }
-                body { margin: 0; padding: 0; background: white; }
-                .invitation-print-root { display: block !important; }
+                body * { visibility: hidden !important; }
+                .invitation-print-root,
+                .invitation-print-root * { visibility: visible !important; }
+                .invitation-print-root {
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                  width: 100% !important;
+                  background: white !important;
+                  z-index: 99999 !important;
+                }
                 .print-page-break { page-break-after: always; }
                 .print-page-break:last-child { page-break-after: auto; }
               }
