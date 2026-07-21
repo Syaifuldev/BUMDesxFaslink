@@ -92,11 +92,11 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             * NB: Harap undangan dibawa
           </div>
           <div className="text-center flex flex-col items-center">
-            <p className="text-xs sm:text-sm text-gray-800">Direktur BUMDes Padas Jaya,</p>
-            <div className="h-14 sm:h-20 flex items-center justify-center my-1">
-              <img src="/ttd_direktur.png" alt="Tanda Tangan" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+            <p className="text-xs sm:text-sm text-gray-800 relative z-10">Direktur BUMDes Padas Jaya,</p>
+            <div className="h-16 sm:h-20 flex items-center justify-center -my-2 sm:-my-4 relative">
+              <img src="/ttd_direktur.png" alt="Tanda Tangan" className="max-h-full max-w-full object-contain mix-blend-multiply" onError={(e) => e.currentTarget.style.display = 'none'} />
             </div>
-            <p className="font-bold text-sm sm:text-base underline">Ferry Tri Sukarno</p>
+            <p className="font-bold text-sm sm:text-base underline relative z-10">Ferry Tri Sukarno</p>
           </div>
         </div>
       </div>
