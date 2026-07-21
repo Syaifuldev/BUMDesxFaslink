@@ -37,11 +37,12 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
   return (
     <>
       {/* ── MODAL FOR PREVIEW ──────────────────────────────────────── */}
-      <Modal
-        open={open}
-        onClose={onClose}
-        title={guests.length > 1 ? `Cetak ${guests.length} Kartu Undangan` : "Cetak Kartu Undangan"}
-        size="xl"
+      <div className="print:hidden">
+        <Modal
+          open={open}
+          onClose={onClose}
+          title={guests.length > 1 ? `Cetak ${guests.length} Kartu Undangan` : "Cetak Kartu Undangan"}
+          size="full"
         footer={
           <>
             <Button variant="outline" onClick={onClose}>Batal</Button>
@@ -53,7 +54,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       >
           <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full max-w-3xl border relative">
+            <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full max-w-4xl relative">
               <div className="text-center mb-6 border-b-2 border-black pb-4">
                 {/* Logos */}
                 <div className="absolute top-4 left-4 sm:top-6 sm:left-8 flex items-center justify-start h-12 w-24 sm:h-14 sm:w-28">
@@ -82,7 +83,8 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                   <div>
                     <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Waktu & Tempat</p>
                     <p className="font-medium text-gray-800">{hari}, {tanggal}</p>
-                    {event.location && <p className="font-medium text-gray-800">{event.location}</p>}
+                    <p className="font-medium text-gray-800">Pukul 06.30 s.d. Selesai</p>
+                    {event.location && <p className="font-medium text-gray-800 mt-1">{event.location}</p>}
                   </div>
                 </div>
 
@@ -106,6 +108,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             </p>
           )}
         </Modal>
+      </div>
 
       {/* ── PRINT ONLY VIEW ──────────────────────────────────────── */}
       {open && (
@@ -126,7 +129,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
             return (
               <div key={g.id || idx} className="w-full flex items-start justify-center pt-8 print-page-break">
                 {/* Strictly 180mm width guarantees it fits within A4 portrait (210mm) */}
-                <div className="w-[180mm] max-w-full border-2 border-black p-6 relative">
+                <div className="w-[180mm] max-w-full p-6 relative">
                   <div className="text-center mb-6 border-b-4 border-black pb-4">
                     {/* Logos */}
                     <div className="absolute top-4 left-4 flex items-center justify-start h-14 w-28">
@@ -155,11 +158,12 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                       <div>
                         <p className="text-xs text-gray-600 font-bold uppercase tracking-wider mb-1">Waktu & Tempat</p>
                         <p className="font-bold text-lg text-gray-800">{hari}, {tanggal}</p>
+                        <p className="font-bold text-lg text-gray-800">Pukul 06.30 s.d. Selesai</p>
                         <p className="font-bold text-base text-gray-700 mt-1">{event.location || '-'}</p>
                       </div>
                     </div>
 
-                    <div className="shrink-0 flex flex-col items-center p-3 border-4 border-black rounded-xl bg-white">
+                    <div className="shrink-0 flex flex-col items-center p-3 rounded-xl bg-white">
                       <QRCodeSVG value={q} size={130} level="H" includeMargin />
                       <p className="text-[10px] text-center mt-2 font-bold tracking-widest text-black">SCAN MASUK</p>
                     </div>
