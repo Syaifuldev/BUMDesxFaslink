@@ -131,7 +131,7 @@ export function GuestTable({
                 {guest.checked_in_at ? formatDateTime(guest.checked_in_at) : '—'}
               </td>
               <td className="px-4 py-3">
-                <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center justify-end gap-1">
                   <button
                     onClick={() => onPrint?.(guest)}
                     className="flex h-7 w-7 items-center justify-center rounded-lg text-surface-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"

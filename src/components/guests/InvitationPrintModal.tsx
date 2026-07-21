@@ -53,20 +53,26 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           <div className="flex-1 space-y-3 text-sm sm:text-base w-full">
             <div>
               <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
-              <p className="font-bold text-lg sm:text-xl">{guest.name}</p>
+              <p className="font-bold text-lg sm:text-xl uppercase">{guest.name}</p>
             </div>
             
             <div>
-              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat</p>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Alamat / Instansi</p>
               <p className="font-medium text-gray-800">{guest.company || '-'}</p>
             </div>
             
             <div>
-              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Waktu & Tempat</p>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Waktu</p>
               <p className="font-medium text-gray-800">{hari}, {tanggal}</p>
               <p className="font-medium text-gray-800">Pukul 06.30 s.d. Selesai</p>
-              {event.location && <p className="font-medium text-gray-800 mt-1">{event.location}</p>}
             </div>
+
+            {event.location && (
+              <div>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Tempat</p>
+                <p className="font-medium text-gray-800">{event.location}</p>
+              </div>
+            )}
           </div>
 
           <div className="shrink-0 flex flex-col items-center p-2 sm:p-3 border-2 border-dashed border-gray-300 rounded-xl">
@@ -122,7 +128,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       >
           <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="w-[195mm] max-w-full shadow-sm border border-gray-200 bg-white mx-auto">
+            <div className="w-[200mm] max-w-full shadow-sm border border-gray-200 bg-white mx-auto">
               {renderCard(previewGuest)}
             </div>
           </div>
@@ -140,7 +146,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           <style>
             {`
               @media print {
-                @page { margin: 5mm; size: portrait; }
+                @page { margin: 0; size: portrait; }
                 body { margin: 0; padding: 0; }
                 .print-page-break { page-break-after: always; }
                 .print-page-break:last-child { page-break-after: auto; }
@@ -151,9 +157,9 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           {guests.map((g, idx) => {
             const q = g.qr_code || g.id || 'no-qr'
             return (
-              <div key={g.id || idx} className="w-full flex items-start justify-center pt-2 print-page-break">
-                {/* 195mm width to fit nicely within F4 (210/215mm) with small margins */}
-                <div className="w-[195mm] max-w-full">
+              <div key={g.id || idx} className="w-full flex items-start justify-center pt-0 print-page-break">
+                {/* 200mm width to fit nicely within F4 (210/215mm) with minimal margins */}
+                <div className="w-[200mm] max-w-full">
                   {renderCard(g)}
                 </div>
               </div>
