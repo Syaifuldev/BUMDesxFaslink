@@ -42,7 +42,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           open={open}
           onClose={onClose}
           title={guests.length > 1 ? `Cetak ${guests.length} Kartu Undangan` : "Cetak Kartu Undangan"}
-          size="full"
+          size="3xl"
         footer={
           <>
             <Button variant="outline" onClick={onClose}>Batal</Button>
@@ -54,22 +54,22 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
       >
           <div className="p-2 sm:p-4 bg-surface-100 dark:bg-surface-800 rounded-xl overflow-hidden flex justify-center w-full">
             {/* Preview Card */}
-            <div className="bg-white text-black p-6 sm:p-8 shadow-sm w-full max-w-4xl relative">
-              <div className="text-center mb-6 border-b-2 border-black pb-4">
+            <div className="bg-white text-black p-4 sm:p-6 shadow-sm w-full max-w-3xl relative">
+              <div className="text-center mb-4 border-b-2 border-black pb-3">
                 {/* Logos */}
-                <div className="absolute top-4 left-4 sm:top-6 sm:left-8 flex items-center justify-start h-12 w-24 sm:h-14 sm:w-28">
+                <div className="absolute top-4 left-4 sm:top-5 sm:left-6 flex items-center justify-start h-10 w-20 sm:h-12 sm:w-24">
                   <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
                 </div>
-                <div className="absolute top-4 right-4 sm:top-6 sm:right-8 flex items-center justify-end h-12 w-24 sm:h-14 sm:w-28">
+                <div className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center justify-end h-10 w-20 sm:h-12 sm:w-24">
                   <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
                 </div>
 
-                <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider mt-6 sm:mt-4">KARTU UNDANGAN</h1>
-                <h2 className="text-lg sm:text-xl font-bold mt-1 text-gray-800">{event.name}</h2>
+                <h1 className="text-lg sm:text-xl font-black uppercase tracking-wider mt-4 sm:mt-2">KARTU UNDANGAN</h1>
+                <h2 className="text-base sm:text-lg font-bold mt-1 text-gray-800">{event.name}</h2>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start justify-between text-center sm:text-left">
-                <div className="flex-1 space-y-4 text-base sm:text-lg w-full">
+              <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start justify-between text-center sm:text-left">
+                <div className="flex-1 space-y-3 text-sm sm:text-base w-full">
                   <div>
                     <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Nama Tamu</p>
                     <p className="font-bold text-lg sm:text-xl">{previewGuest.name}</p>
@@ -88,16 +88,16 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
                   </div>
                 </div>
 
-                <div className="shrink-0 flex flex-col items-center p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-xl">
-                  <QRCodeSVG value={previewQrValue} size={120} level="H" includeMargin />
-                  <p className="text-[10px] sm:text-xs text-center mt-2 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
+                <div className="shrink-0 flex flex-col items-center p-2 sm:p-3 border-2 border-dashed border-gray-300 rounded-xl">
+                  <QRCodeSVG value={previewQrValue} size={90} level="H" includeMargin />
+                  <p className="text-[9px] sm:text-[10px] text-center mt-1 text-gray-500 font-mono">SCAN UNTUK MASUK</p>
                 </div>
               </div>
 
-              <div className="mt-8 sm:mt-12 flex justify-end">
+              <div className="mt-6 sm:mt-8 flex justify-end">
                 <div className="text-center">
-                  <p className="text-xs sm:text-sm text-gray-800 mb-12 sm:mb-16">Direktur BUMDes Padas Jaya,</p>
-                  <p className="font-bold text-base sm:text-lg underline">Ferry Tri Sukarno</p>
+                  <p className="text-xs sm:text-sm text-gray-800 mb-8 sm:mb-10">Direktur BUMDes Padas Jaya,</p>
+                  <p className="font-bold text-sm sm:text-base underline">Ferry Tri Sukarno</p>
                 </div>
               </div>
             </div>
