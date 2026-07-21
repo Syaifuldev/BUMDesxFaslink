@@ -42,7 +42,7 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           <div className="absolute top-4 left-8 sm:top-5 sm:left-10 flex items-center justify-start h-16 w-32 sm:h-20 sm:w-40">
             <img src="/bumdes_logo.png" alt="BUMDes Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
           </div>
-          <div className="absolute top-4 right-4 sm:top-5 sm:right-6 flex items-center justify-end h-16 w-32 sm:h-20 sm:w-40">
+          <div className="absolute top-4 right-0 sm:top-5 sm:right-2 flex items-center justify-end h-16 w-32 sm:h-20 sm:w-40">
             <img src="/fastlink_logo.png" alt="Fastlink Logo" className="max-h-full max-w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
           </div>
 
@@ -87,7 +87,10 @@ export function InvitationPrintModal({ guests, event, open, onClose }: Invitatio
           </div>
         </div>
 
-        <div className="mt-6 sm:mt-8 flex justify-end">
+        <div className="mt-6 sm:mt-8 flex justify-between items-end">
+          <div className="text-[10px] sm:text-xs text-gray-600 font-medium pb-2 italic text-left">
+            * NB: Harap undangan dibawa
+          </div>
           <div className="text-center flex flex-col items-center">
             <p className="text-xs sm:text-sm text-gray-800">Direktur BUMDes Padas Jaya,</p>
             <div className="h-16 sm:h-24 flex items-center justify-center my-1">
