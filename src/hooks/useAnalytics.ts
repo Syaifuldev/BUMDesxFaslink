@@ -92,40 +92,20 @@ export function useAnalytics(eventId: string): AnalyticsData & {
     setError(null)
 
     try {
-      // 1. Total invitations + category breakdown
-      const { data: invData, error: invErr } = await supabase
-        .from('invitations')
-        .select('id, status, category')
+      // 1. Fetch all guests
+      const { data: guestsData, error: guestsErr } = await supabase
+        .from('guests')
+        .select('id, name, company, table_number, seat_number, checked_in, checked_in_at')
         .eq('event_id', eventId)
-        .is('deleted_at', null)
 
-      if (invErr) throw new Error(invErr.message)
-      const invitations = invData ?? []
-
-      // 2. All check-in rows for this event (for hourly grouping)
-      const { data: checkinData, error: checkinErr } = await supabase
-        .from('checkins')
-        .select('id, invitation_id, checked_in_at, method')
-        .eq('event_id', eventId)
-        .order('checked_in_at', { ascending: true })
-
-      if (checkinErr) throw new Error(checkinErr.message)
-      const checkins = checkinData ?? []
-
-      // 3. Recent check-ins feed (view with joined data)
-      const { data: recentData, error: recentErr } = await supabase
-        .from('v_recent_checkins')
-        .select('*')
-        .eq('event_id', eventId)
-        .order('checked_in_at', { ascending: false })
-        .limit(15)
-
-      if (recentErr) throw new Error(recentErr.message)
+      if (guestsErr) throw new Error(guestsErr.message)
+      const guests = guestsData ?? []
 
       // ── Compute stats ────────────────────────────────────
-      const total      = invitations.length
-      const checkedIn  = new Set(checkins.map((c) => c.invitation_id)).size
-      const notIn      = total - checkedIn
+      const total = guests.length
+      const checkedInGuests = guests.filter(g => g.checked_in && g.checked_in_at)
+      const checkedIn = checkedInGuests.length
+      const notIn = total - checkedIn
       const percentage = total > 0
         ? Math.round((checkedIn / total) * 1000) / 10
         : 0
@@ -133,17 +113,16 @@ export function useAnalytics(eventId: string): AnalyticsData & {
       setStats({ total, checkedIn, notCheckedIn: notIn, percentage })
 
       // ── Hourly series ────────────────────────────────────
-      setHourly(buildHourlySeries(checkins))
+      setHourly(buildHourlySeries(checkedInGuests as any))
 
       // ── Category breakdown ───────────────────────────────
       const catMap: Record<string, { total: number; checkedIn: number }> = {}
-      const checkedInvIds = new Set(checkins.map((c) => c.invitation_id))
 
-      for (const inv of invitations) {
-        const cat = inv.category ?? 'general'
+      for (const g of guests) {
+        const cat = 'general' // Guests schema doesn't have categories yet
         if (!catMap[cat]) catMap[cat] = { total: 0, checkedIn: 0 }
         catMap[cat].total += 1
-        if (checkedInvIds.has(inv.id)) catMap[cat].checkedIn += 1
+        if (g.checked_in) catMap[cat].checkedIn += 1
       }
 
       const catData: CategoryDataPoint[] = Object.entries(catMap)
@@ -156,7 +135,30 @@ export function useAnalytics(eventId: string): AnalyticsData & {
         .sort((a, b) => b.count - a.count)
 
       setByCategory(catData)
-      setRecentCheckins((recentData ?? []) as RecentCheckinView[])
+      
+      // ── Recent Checkins ────────────────────────────────────
+      const recent = checkedInGuests
+        .sort((a, b) => new Date(b.checked_in_at!).getTime() - new Date(a.checked_in_at!).getTime())
+        .slice(0, 15)
+        .map(g => ({
+          id: g.id,
+          checked_in_at: g.checked_in_at!,
+          checked_out_at: null,
+          method: 'manual',
+          invitation_id: g.id,
+          guest_name: g.name,
+          guest_email: null,
+          company: g.company,
+          category: 'general',
+          table_number: g.table_number,
+          seat_number: g.seat_number,
+          event_id: eventId,
+          event_title: '',
+          event_start_at: '',
+          operator_name: null,
+        } as RecentCheckinView))
+        
+      setRecentCheckins(recent)
       setLastUpdated(new Date())
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Failed to load analytics'
@@ -186,35 +188,15 @@ export function useAnalytics(eventId: string): AnalyticsData & {
       .on(
         'postgres_changes',
         {
-          event:  'INSERT',
+          event:  '*',
           schema: 'public',
-          table:  'checkins',
+          table:  'guests',
           filter: `event_id=eq.${eventId}`,
         },
         () => {
-          // Debounce: avoid stampede if many check-ins arrive at once
+          // Debounce: avoid stampede if many updates arrive at once
           setTimeout(() => fetchAll(), 300)
         },
-      )
-      .on(
-        'postgres_changes',
-        {
-          event:  'DELETE',
-          schema: 'public',
-          table:  'checkins',
-          filter: `event_id=eq.${eventId}`,
-        },
-        () => { setTimeout(() => fetchAll(), 300) },
-      )
-      .on(
-        'postgres_changes',
-        {
-          event:  '*',
-          schema: 'public',
-          table:  'invitations',
-          filter: `event_id=eq.${eventId}`,
-        },
-        () => { setTimeout(() => fetchAll(), 300) },
       )
       .subscribe()
 
