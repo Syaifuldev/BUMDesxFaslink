@@ -44,9 +44,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <span className="absolute right-3 text-surface-400 dark:text-surface-500 pointer-events-none">
+            <div className="absolute right-3 flex items-center text-surface-400 dark:text-surface-500">
               {rightIcon}
-            </span>
+            </div>
           )}
         </div>
         {error && <p className="text-xs text-red-500">{error}</p>}
